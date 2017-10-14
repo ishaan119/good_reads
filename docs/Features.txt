@@ -1,0 +1,8 @@
+Analytics:
+
+Country
+Gender
+Age Distribution
+Living vs Dead
+
+Friends Analysis

@@ -1,0 +1,81 @@
+{%- extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<div class="topnav" id="myTopnav">
+  <a href="#home">Home</a>
+  <a href="{{ url_for('analyze_books_read', author_books=book_author) }}">Analyze Authors</a>
+  <a href="{{ url_for('get_friend_stats') }}">Analyze Friends</a>
+  <a href="#contact">Contact</a>
+  <a href="#about">About</a>
+</div>
+
+<head>
+
+    <style>
+        body {margin: 0;}
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.topnav li a:hover:not(.active) {background-color: #111;}
+
+ul.topnav li a.active {background-color: #4CAF50;}
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 600px){
+    ul.topnav li.right,
+    ul.topnav li {float: none;}
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<table>
+<tr>
+    <th>Author</th>
+    <th>Book</th>
+  </tr>
+  {% for book in user_books%}
+    <tr>
+      <td>{{ book }}</td>
+      <td>{{ user_books[book] }}</td>
+     </tr>
+   {% endfor %}
+</table>
+<body>
+
+</body>
+</html>
+{%  endblock %}

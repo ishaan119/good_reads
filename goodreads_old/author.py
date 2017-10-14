@@ -1,10 +1,10 @@
 import book
-from datetime import  datetime
-
+import user
 
 class GoodreadsAuthor:
-    def __init__(self, author_dict):
+    def __init__(self, author_dict, client):
         self._author_dict = author_dict
+        self._client = client
 
     def __repr__(self):
         return self.name
@@ -29,36 +29,27 @@ class GoodreadsAuthor:
         """Books of the author"""
         # Goodreads API returns a list if there are more than one books, otherwise,
         # just the OrderedDict.
-        return  None
-        '''
         if type(self._author_dict['books']['book']) == list:
             return [book.GoodreadsBook(book_dict, self._client)
                     for book_dict in self._author_dict['books']['book']]
         else:
             return [book.GoodreadsBook(self._author_dict['books']['book'],
-                                       self._client)]
-        '''
+                                      self._client)]
 
     @property
     def born_at(self):
         """Author date of birth"""
-        if self._author_dict['born_at']:
-            return datetime.strptime(self._author_dict['born_at'], '%Y/%m/%d')
-        else:
-            return  None
+        return self._author_dict['born_at']
 
     @property
     def died_at(self):
         """Author date of death"""
-        if self._author_dict['died_at']:
-            return datetime.strptime(self._author_dict['died_at'], '%Y/%m/%d')
-        else:
-            return  None
+        return self._author_dict['died_at']
 
     @property
     def fans_count(self):
         """Number of fans"""
-        return self._author_dict['fans_count']['#text']
+        return self._author_dict['fans_count']
 
     @property
     def gender(self):
@@ -94,11 +85,9 @@ class GoodreadsAuthor:
     def user(self):
         """Goodreads user profile of the author"""
         goodreads_user = None
-        '''
         if 'user' in self._author_dict:
             goodreads_user = user.GoodreadsUser(
                 self._author_dict['user']['id']['#text'], self._client)
-        '''
         return goodreads_user
 
     @property

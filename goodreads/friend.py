@@ -1,10 +1,3 @@
-'''
-Created on Dec 20, 2015
-
-@author: ishaansutaria
-'''
-
-
 class GoodreadFriend():
 
     def __init__(self, friend_dict):
