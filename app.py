@@ -2,9 +2,14 @@ from flask import Flask, redirect, url_for, render_template, flash,session,jsoni
 from flask_sqlalchemy import SQLAlchemy
 from oauth import OAuthSignIn
 from flask_bootstrap import Bootstrap
+from nav import nav
+from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
+from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION
+
 
 app = Flask(__name__)
 Bootstrap(app)
+nav.init_app(app)
 app.config['SECRET_KEY'] = 'top secret!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['OAUTH_CREDENTIALS'] = {
@@ -13,8 +18,8 @@ app.config['OAUTH_CREDENTIALS'] = {
         'secret': 'xx'
     },
     'goodreads': {
-        'id': 'xx',
-        'secret': 'xx'
+        'id': 'AiavlqI7ZR55oBzDbT1y2w',
+        'secret': 'nyxzFDTt63e8f9SjgXlBOIQylq2eNqrRszbS2TiDzA'
     }
 }
 book_author = {}
@@ -46,6 +51,25 @@ class Author(db.Model):
     country = db.Column(db.String(64), nullable=True)
     books = db.Column(db.String(200), nullable=True)
 
+print("asda")
+# Initializing flask navbar
+nav.register_element('frontend_top', Navbar(
+    View('Flask-Bootstrap', '.index'),
+    View('Home', '.index'),
+    View('Forms Example', '.analyze_books_read'),
+    Subgroup(
+        'Docs',
+        Link('Flask-Bootstrap', 'http://pythonhosted.org/Flask-Bootstrap'),
+        Link('Flask-AppConfig', 'https://github.com/mbr/flask-appconfig'),
+        Link('Flask-Debug', 'https://github.com/mbr/flask-debug'),
+        Separator(),
+        Text('Bootstrap'),
+        Link('Getting started', 'http://getbootstrap.com/getting-started/'),
+        Link('CSS', 'http://getbootstrap.com/css/'),
+        Link('Components', 'http://getbootstrap.com/components/'),
+        Link('Javascript', 'http://getbootstrap.com/javascript/'),
+        Link('Customize', 'http://getbootstrap.com/customize/'), )))
+
 
 @app.route('/')
 def index():
@@ -71,7 +95,27 @@ def user_profile():
         else:
             books_read[review['book']['authors']['author']['name']] = [review['book']['title']]
 
-    return render_template('profile.html', user_books=books_read)
+    authors = []
+    gender_analysis = {'male': 0, 'female': 0, 'ath_c': {}}
+    for author_name in book_author:
+        author_info = oauth.get_author_info(book_author[author_name], user.request_token, user.request_secret)
+        if author_info.gender == 'male':
+            gender_analysis['male'] += 1
+        else:
+            gender_analysis['female'] += 1
+        if author_info.country in gender_analysis['ath_c']:
+            gender_analysis['ath_c'][author_info.country] += 1
+        else:
+            gender_analysis['ath_c'][author_info.country] = 1
+
+    labels = []
+    values = []
+    for key in gender_analysis['ath_c']:
+        labels.append(key)
+        values.append(gender_analysis['ath_c'][key])
+
+    return render_template('profile.html', user_books=books_read, total_book=len(review_list),
+                           gender_analysis=gender_analysis, values=values, labels=labels)
     # return jsonify(user_books)
 
 
@@ -156,7 +200,6 @@ def get_friend_stats():
     user_friends = oauth.get_user_friends(user.request_token, user.request_secret, user_id)
     print user_friends
 
-
 if __name__ == '__main__':
     db.create_all()
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')

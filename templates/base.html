@@ -37,3 +37,7 @@
     <link rel="stylesheet" type="text/css"
           href="{{url_for('static', filename='business-casual.css')}}">
 {% endblock %}
+
+{% block navbar %}
+{{nav.frontend_top.render()}}
+{% endblock %}
