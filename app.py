@@ -5,24 +5,12 @@ from flask_bootstrap import Bootstrap
 from nav import nav
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
 from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION
-
+import config
 
 app = Flask(__name__)
+config.configure_app(app)
 Bootstrap(app)
 nav.init_app(app)
-app.config['SECRET_KEY'] = 'top secret!'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-app.config['SERVER_NAME'] == "recommendmebooks.com"
-app.config['OAUTH_CREDENTIALS'] = {
-    'facebook': {
-        'id': 'xx',
-        'secret': 'xx'
-    },
-    'goodreads': {
-        'id': 'AiavlqI7ZR55oBzDbT1y2w',
-        'secret': 'nyxzFDTt63e8f9SjgXlBOIQylq2eNqrRszbS2TiDzA'
-    }
-}
 book_author = {}
 db = SQLAlchemy(app)
 
@@ -52,7 +40,7 @@ class Author(db.Model):
     country = db.Column(db.String(64), nullable=True)
     books = db.Column(db.String(200), nullable=True)
 
-print("asda")
+
 # Initializing flask navbar
 nav.register_element('frontend_top', Navbar(
     View('Flask-Bootstrap', '.index'),
@@ -203,4 +191,4 @@ def get_friend_stats():
 
 if __name__ == '__main__':
     db.create_all()
-    app.run(debug=True,host='0.0.0.0', port=80)
+    app.run(debug=True,host='0.0.0.0')

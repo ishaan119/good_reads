@@ -3,7 +3,6 @@ from flask import current_app, url_for, request, redirect, session
 import xmltodict
 from goodreads.author import GoodreadsAuthor
 from data.models import Author, db
-from datetime import datetime
 from utils.helper import get_author_country
 from goodreads.friend import GoodreadFriend
 
@@ -23,9 +22,11 @@ class OAuthSignIn(object):
         pass
 
     def get_callback_url(self):
-        #return url_for('oauth_callback', provider=self.provider_name,
-        #               _external=True)
-        callback_url = "http://recommendmebooks.com/callback/goodreads"
+        if current_app.config['ENV'] == "dev":
+            return url_for('oauth_callback', provider=self.provider_name,
+                       _external=True)
+        else:
+            callback_url = current_app.config['CALLBACK']
         return callback_url
 
 
