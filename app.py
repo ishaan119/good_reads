@@ -1,10 +1,9 @@
-from flask import Flask, redirect, url_for, render_template, flash,session,jsonify
+from flask import Flask, redirect, url_for, render_template, flash,session,current_app
 from flask_sqlalchemy import SQLAlchemy
 from oauth import OAuthSignIn
 from flask_bootstrap import Bootstrap
 from nav import nav
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
-from flask_bootstrap import __version__ as FLASK_BOOTSTRAP_VERSION
 import config
 
 app = Flask(__name__)
@@ -86,7 +85,8 @@ def user_profile():
                 books_read[review['book']['authors']['author']['name']].append(review['book']['title'])
             else:
                 books_read[review['book']['authors']['author']['name']] = [review['book']['title']]
-
+    else:
+        app.logger.debug("No books found for the user_id: " + user.name)
     authors = []
     gender_analysis = {'male': 0, 'female': 0, 'ath_c': {}}
     for author_name in book_author:
@@ -106,6 +106,7 @@ def user_profile():
         labels.append(key)
         values.append(gender_analysis['ath_c'][key])
 
+    app.logger.debug("For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name, len(review_list), gender_analysis))
     return render_template('profile.html', user_books=books_read, total_book=len(review_list),
                            gender_analysis=gender_analysis, values=values, labels=labels)
     # return jsonify(user_books)
