@@ -64,6 +64,7 @@ nav.register_element('frontend_top', Navbar(
 def index():
     return render_template('index.html')
 
+
 def get_user(user_id):
     user = User.query.filter_by(user_id=user_id).first()
     return user
@@ -75,14 +76,16 @@ def user_profile():
     user = get_user(user_id)
     oauth = OAuthSignIn.get_provider('goodreads')
     user_books = oauth.get_user_books(user.request_token,user.request_secret,user.oauth_token,user.user_id)
-    review_list = user_books['GoodreadsResponse']['reviews']['review']
     books_read = {}
-    for review in review_list:
-        book_author[review['book']['authors']['author']['name']] = review['book']['authors']['author']['id']
-        if review['book']['authors']['author']['name'] in books_read:
-            books_read[review['book']['authors']['author']['name']].append(review['book']['title'])
-        else:
-            books_read[review['book']['authors']['author']['name']] = [review['book']['title']]
+    review_list = []
+    if 'review' in user_books['GoodreadsResponse']['reviews']:
+        review_list = user_books['GoodreadsResponse']['reviews']['review']
+        for review in review_list:
+            book_author[review['book']['authors']['author']['name']] = review['book']['authors']['author']['id']
+            if review['book']['authors']['author']['name'] in books_read:
+                books_read[review['book']['authors']['author']['name']].append(review['book']['title'])
+            else:
+                books_read[review['book']['authors']['author']['name']] = [review['book']['title']]
 
     authors = []
     gender_analysis = {'male': 0, 'female': 0, 'ath_c': {}}
