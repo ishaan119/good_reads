@@ -12,6 +12,7 @@ Bootstrap(app)
 nav.init_app(app)
 app.config['SECRET_KEY'] = 'top secret!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+app.config['SERVER_NAME'] == "recommendmebooks.com"
 app.config['OAUTH_CREDENTIALS'] = {
     'facebook': {
         'id': 'xx',
