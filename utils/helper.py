@@ -15,5 +15,4 @@ def get_author_country(location):
         return temp[0]['formatted_address'].split(u',')[-1]
     except:
         print 'Exception Found for Location'
-        print location
         return None
