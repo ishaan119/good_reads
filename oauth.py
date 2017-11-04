@@ -101,6 +101,9 @@ class GoodReadsSignIn(OAuthSignIn):
         return redirect(self.service.get_authorize_url(request_token[0], oauth_callback=self.get_callback_url()))
 
     def callback(self):
+        if 'request_token' not in session:
+            current_app.logger.error("Error validating oauth")
+            return None
         request_token = session.pop('request_token')
         if 'oauth_token' not in request.args:
             return None, None, None
