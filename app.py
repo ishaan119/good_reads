@@ -169,8 +169,8 @@ def analyze_books_read():
 def oauth_callback(provider):
     oauth = OAuthSignIn.get_provider(provider)
     user_dict = oauth.callback()
-    print user_dict
     if 'as' is None:
+        app.logger.warning("Authentication failed")
         flash('Authentication failed.')
         return redirect(url_for('index'))
     gr_response = user_dict['user_info']['GoodreadsResponse']['user']
@@ -195,4 +195,4 @@ def get_friend_stats():
 
 if __name__ == '__main__':
     db.create_all()
-    app.run(debug=True,host='0.0.0.0')
+    app.run(debug=app.config['DEBUG'],host='0.0.0.0')

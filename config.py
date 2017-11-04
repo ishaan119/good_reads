@@ -1,5 +1,6 @@
 import os
 import os
+from logging.handlers import RotatingFileHandler
 import logging
 
 
@@ -7,11 +8,6 @@ class BaseConfig(object):
     DEBUG = False
     TESTING = False
     LOGGING_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    LOGGING_LOCATION = 'oorjan.log'
-    LOGGING_LEVEL = logging.DEBUG
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:1111@localhost/SOLAR_DATA'
-
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
@@ -30,6 +26,7 @@ class DevelopmentConfig(BaseConfig):
     }
     CALLBACK = "http://localhost:5000/callback/goodreads"
     ENV = "dev"
+    LOG_LEVEL = 10
 
 
 class TestingConfig(BaseConfig):
@@ -54,6 +51,7 @@ class ProductionConfig(BaseConfig):
     }
     CALLBACK = "http://recommendmebooks.com/callback/goodreads"
     ENV = 'prod'
+    LOG_LEVEL = 20
 
 
 config = {
@@ -66,16 +64,9 @@ config = {
 
 def configure_app(app):
     config_name = os.getenv('FLASK_CONFIGURATION', 'development')
-    print config_name
     app.config.from_object(config[config_name])
     # app.config.from_envvar('FLASK_CONFIG')
-    LOGGING_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    LOGGING_LOCATION = 'gr.log'
-    LOGGING_LEVEL = logging.DEBUG
 
-    # Configure logging
-    handler = logging.FileHandler(LOGGING_LOCATION)
-    handler.setLevel(LOGGING_LEVEL)
-    formatter = logging.Formatter(LOGGING_FORMAT)
-    handler.setFormatter(formatter)
+    handler = RotatingFileHandler('foo.log', maxBytes=10000, backupCount=1)
+    handler.setLevel(app.config['LOG_LEVEL'])
     app.logger.addHandler(handler)

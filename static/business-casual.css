@@ -111,6 +111,19 @@ footer p {
     padding: 50px 0;
 }
 
+div#loading {
+    width: 64px;
+    height: 64px;
+    display: none;
+    background: url(/static/166.gif);
+    cursor: wait;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
 @media screen and (min-width:768px) {
     .brand {
         display: inherit;
