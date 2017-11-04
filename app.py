@@ -7,10 +7,11 @@ from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
 import config
 import newrelic.agent
 
-newrelic.agent.initialize()
 
 app = Flask(__name__)
 config.configure_app(app)
+if not app.config['ENV'] == 'dev':
+    newrelic.agent.initialize('/home/ubuntu/good_reads/newrelic.ini')
 Bootstrap(app)
 nav.init_app(app)
 book_author = {}
