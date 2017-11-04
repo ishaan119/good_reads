@@ -5,6 +5,9 @@ from flask_bootstrap import Bootstrap
 from nav import nav
 from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
 import config
+import newrelic.agent
+
+newrelic.agent.initialize()
 
 app = Flask(__name__)
 config.configure_app(app)
