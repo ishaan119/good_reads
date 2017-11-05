@@ -2,8 +2,8 @@ from flask import Flask, redirect, url_for, render_template, flash,session,curre
 from flask_sqlalchemy import SQLAlchemy
 from oauth import OAuthSignIn
 from flask_bootstrap import Bootstrap
-from nav import nav
-from flask_nav.elements import Navbar, View, Subgroup, Link, Text, Separator
+from nav import nav, navitems
+from flask_nav.elements import Navbar, View
 import config
 import newrelic.agent
 
@@ -42,12 +42,12 @@ class Author(db.Model):
     country = db.Column(db.String(64), nullable=True)
     books = db.Column(db.String(200), nullable=True)
 
-
+"""
 # Initializing flask navbar
 nav.register_element('frontend_top', Navbar(
-    View('Flask-Bootstrap', '.index'),
     View('Home', '.index'),
     View('Forms Example', '.analyze_books_read'),
+    View('Logout', '.logout'),
     Subgroup(
         'Docs',
         Link('Flask-Bootstrap', 'http://pythonhosted.org/Flask-Bootstrap'),
@@ -60,11 +60,21 @@ nav.register_element('frontend_top', Navbar(
         Link('Components', 'http://getbootstrap.com/components/'),
         Link('Javascript', 'http://getbootstrap.com/javascript/'),
         Link('Customize', 'http://getbootstrap.com/customize/'), )))
+"""
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if 'user_id1' in session:
+        return redirect(url_for('user_profile'))
+    register_element(nav, navitems)
+    return render_template('index.html', nav=nav.elems)
+
+
+def register_element(nav1, navitems1):
+    if 'user_id1' in session:
+        navitems1 = (navitems1 + [View('Logout', '.logout')])
+    return nav1.register_element('frontend_top', Navbar(*navitems1))
 
 
 def get_user(user_id):
@@ -111,6 +121,7 @@ def user_profile():
         values.append(gender_analysis['ath_c'][key])
 
     app.logger.info("For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name, len(review_list), gender_analysis))
+    register_element(nav, navitems)
     return render_template('profile.html', user_books=books_read, total_book=len(review_list),
                            gender_analysis=gender_analysis, values=values, labels=labels)
     # return jsonify(user_books)
@@ -139,6 +150,9 @@ def country_distribution():
 
 @app.route('/logout')
 def logout():
+    if 'user_id1' in session:
+        session.pop('user_id1')
+
     return redirect(url_for('index'))
 
 
