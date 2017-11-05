@@ -112,8 +112,6 @@ class GoodReadsSignIn(OAuthSignIn):
             request_token[1],
             data={'oauth_token': request.args['oauth_token']}
         )
-        print oauth_session.access_token_secret
-        print oauth_session.access_token
         me = oauth_session.get('api/auth_user')
         user_info = xmltodict.parse(me.content)
         user = {'request_token':oauth_session.access_token,'request_secret':oauth_session.access_token_secret,

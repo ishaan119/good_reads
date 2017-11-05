@@ -14,7 +14,6 @@ if not app.config['ENV'] == 'dev':
     newrelic.agent.initialize('/home/ubuntu/good_reads/newrelic.ini')
 Bootstrap(app)
 nav.init_app(app)
-book_author = {}
 db = SQLAlchemy(app)
 
 
@@ -80,6 +79,7 @@ def user_profile():
     oauth = OAuthSignIn.get_provider('goodreads')
     user_books = oauth.get_user_books(user.request_token,user.request_secret,user.oauth_token,user.user_id)
     books_read = {}
+    book_author = {}
     review_list = []
     if 'review' in user_books['GoodreadsResponse']['reviews']:
         review_list = user_books['GoodreadsResponse']['reviews']['review']
