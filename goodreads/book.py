@@ -2,10 +2,10 @@
 
 import author
 
+
 class GoodreadsBook:
-    def __init__(self, book_dict, client):
+    def __init__(self, book_dict):
         self._book_dict = book_dict
-        self._client = client
 
     def __repr__(self):
         return self.title
@@ -26,11 +26,10 @@ class GoodreadsBook:
         # Goodreads API returns a list if there are more than one authors,
         # otherwise, just the OrderedDict
         if type(self._book_dict['authors']['author']) == list:
-            return [author.GoodreadsAuthor(author_dict, self._client)
+            return [author.GoodreadsAuthor(author_dict)
                     for author_dict in self._book_dict['authors']['author']]
         else:
-            return [author.GoodreadsAuthor(self._book_dict['authors']['author'],
-                                           self._client)]
+            return [author.GoodreadsAuthor(self._book_dict['authors']['author'])]
 
     @property
     def description(self):

@@ -2,9 +2,13 @@ from rauth import OAuth1Service, OAuth2Service
 from flask import current_app, url_for, request, redirect, session
 import xmltodict
 from goodreads.author import GoodreadsAuthor
+from goodreads.book import GoodreadsBook
 from data.models import Author, db
 from utils.helper import get_author_country
 from goodreads.friend import GoodreadFriend
+import requests
+import collections
+
 
 class OAuthSignIn(object):
     providers = None
@@ -158,3 +162,33 @@ class GoodReadsSignIn(OAuthSignIn):
          for user in resp['friends']['user']]
         friends = GoodreadFriend(xmltodict.parse(me.content)['GoodreadsResponse']['friends'])
         print friends
+
+
+def search_books(q, page=1, search_field='all'):
+    resp = requests.get("https://www.goodreads.com/search/index.xml",
+                            {'key':current_app.config['OAUTH_CREDENTIALS']['goodreads']['id'],
+                             'q': q, 'page': page, 'search[field]': search_field})
+    content = xmltodict.parse(resp.content)['GoodreadsResponse']
+    works = content['search']['results']['work']
+    # If there's only one work returned, put it in a list.
+    if type(works) == collections.OrderedDict:
+        works = [works]
+    search_results = []
+    for work in works[0:3]:
+        tt = {}
+        tt['author'] = work['best_book']['author']['name']
+        tt['author_id'] = work['best_book']['author']['id']['#text']
+        tt['book_id'] = work['best_book']['id']['#text']
+        tt['title'] = work['best_book']['title']
+        tt['image'] = work['best_book']['image_url']
+        search_results.append(tt)
+    return search_results
+
+
+def get_book_info(book_id=None, isbn=None):
+    """Get info about a book"""
+    if book_id:
+        resp = requests.get("https://www.goodreads.com/book/show", {'id': book_id,
+                                                                    'key':current_app.config['OAUTH_CREDENTIALS']['goodreads']['id']})
+        content = xmltodict.parse(resp.content)['GoodreadsResponse']
+        return GoodreadsBook(content['book'])

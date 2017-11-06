@@ -2,7 +2,7 @@
 {% import "bootstrap/utils.html" as utils %}
 {% block content %}
     <script src={{ url_for('static', filename='jquery.min.js') }}></script>
-<div class="brand">Goodreads SideKick</div>å
+<div class="brand">Goodreads SideKick</div>
 <div id="loading"></div>
     <div id="content">
  <div class="container">
@@ -26,6 +26,7 @@
                 <div class="clearfix"></div>
             </div>
         </div>
+ </div>
     {% block scripts %}
         <script>
         function loading(){
@@ -34,4 +35,8 @@
         }
         </script>
         {% endblock %}
+    </div>
+    <div class="container-fluid footer navbar-fixed-bottom right">
+        <p>© 2017<a style="color:#0a93a6; text-decoration:none;" href="#"> BootSnipp And TomGeek76</a>, All rights reserved 2016-2017.</p>
+    </div>
 {%  endblock %}

@@ -1,6 +1,6 @@
-from flask import Flask, redirect, url_for, render_template, flash,session,current_app
+from flask import Flask, redirect, url_for, render_template, flash,session,request
 from flask_sqlalchemy import SQLAlchemy
-from oauth import OAuthSignIn
+from oauth import OAuthSignIn, search_books, get_book_info
 from flask_bootstrap import Bootstrap
 from nav import nav, navitems
 from flask_nav.elements import Navbar, View
@@ -15,6 +15,7 @@ if not app.config['ENV'] == 'dev':
 Bootstrap(app)
 nav.init_app(app)
 db = SQLAlchemy(app)
+db.create_all()
 
 
 class User( db.Model):
@@ -42,26 +43,22 @@ class Author(db.Model):
     country = db.Column(db.String(64), nullable=True)
     books = db.Column(db.String(200), nullable=True)
 
-"""
-# Initializing flask navbar
-nav.register_element('frontend_top', Navbar(
-    View('Home', '.index'),
-    View('Forms Example', '.analyze_books_read'),
-    View('Logout', '.logout'),
-    Subgroup(
-        'Docs',
-        Link('Flask-Bootstrap', 'http://pythonhosted.org/Flask-Bootstrap'),
-        Link('Flask-AppConfig', 'https://github.com/mbr/flask-appconfig'),
-        Link('Flask-Debug', 'https://github.com/mbr/flask-debug'),
-        Separator(),
-        Text('Bootstrap'),
-        Link('Getting started', 'http://getbootstrap.com/getting-started/'),
-        Link('CSS', 'http://getbootstrap.com/css/'),
-        Link('Components', 'http://getbootstrap.com/components/'),
-        Link('Javascript', 'http://getbootstrap.com/javascript/'),
-        Link('Customize', 'http://getbootstrap.com/customize/'), )))
-"""
 
+class Book(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    gid = db.Column(db.Integer, nullable=False, unique=True)
+    isbn = db.Column(db.Integer, nullable=False, unique=True)
+    isbn13 = db.Column(db.Integer, nullable=False, unique=True)
+    title = db.Column(db.String(64), nullable=False)
+    description = db.Column(db.String(2000), nullable=True)
+    publication = db.Column(db.DateTime)
+    image_url = db.Column(db.String(200), nullable=True)
+    pages = db.Column(db.Integer, nullable=True)
+    ratings_count = db.Column(db.DECIMAL, nullable=True)
+    average_rating = db.Column(db.DECIMAL, nullable=True)
+    language = db.Column(db.String, nullable=True)
+    author_gid = db.Column(db.Integer, db.ForeignKey(
+        'author.gid'))
 
 @app.route('/')
 def index():
@@ -211,6 +208,29 @@ def get_friend_stats():
     user_friends = oauth.get_user_friends(user.request_token, user.request_secret, user_id)
     print user_friends
 
+
+@app.route('/recommend/book/', methods=['GET','POST'])
+def recommend_book():
+    if request.method == "POST":
+        print request.form['search']
+        books = search_books(request.form['search'])
+        return render_template('recommend_book.html', nav=nav.elems, books=books)
+    else:
+        register_element(nav, navitems)
+        return render_template('recommend_book.html', nav=nav.elems)
+
+
+@app.route('/about')
+def about():
+    register_element(nav, navitems)
+    return render_template('about.html', nav=nav.elems)
+
+
+@app.route('/recommendations', methods=['GET', 'POST'])
+def add_recommended_book():
+    book_id =  request.form['reco']
+    binfo = get_book_info(book_id)
+    print binfo
+
 if __name__ == '__main__':
-    db.create_all()
     app.run(debug=app.config['DEBUG'],host='0.0.0.0')

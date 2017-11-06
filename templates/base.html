@@ -22,7 +22,7 @@
    ``super()`` is used: #}
 {% block head %}
 {{super()}}
-
+<link rel="icon" href={{ url_for('static', filename='12.png') }}>
 {#- Docs: http://pythonhosted.org/Flask-Bootstrap/macros.html#fixes
    The sample application already contains the required static files. #}
 {{fixes.ie8()}}
