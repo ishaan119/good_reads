@@ -1,0 +1,118 @@
+{%- extends "base.html" %}
+{% block content %}
+    <!DOCTYPE html>
+    <script src={{ url_for('static', filename='Chart.min.js') }}></script>
+
+<head>
+
+    <style>
+        body {margin: 0;}
+
+</style>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Your Book Recommendation!</h3>
+            </div>
+            <div class="row">
+            <div class="col-md-6">
+                <dl class="dl-horizontal">
+				<dt>
+					Title
+				</dt>
+				<dd>
+					<b> {{ reco_book.title }} </b>
+				</dd>
+				<dt>
+					Description
+				</dt>
+				<dd>
+					{{ reco_book.description[0:200] + '...' }}
+				</dd>
+				<dt>
+					Average Rating
+				</dt>
+				<dd>
+					{{ reco_book.average_rating }}
+				</dd>
+				<dt>
+                     Author's Place of birth
+				</dt>
+				<dt>
+					 {{ author_info.country }}
+				</dt>
+			</dl>
+            </div>
+                   <div class="col-md-6">
+                <img src="{{ reco_book.image_url }}" />
+            </div>
+            </div>
+        </div>
+      </div>
+</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h3 class="text-success text-center">
+				Your Goodreads Analysis
+			</h3>
+		</div>
+        <div class="col-xs-12" style="height:50px;"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+            <h1><span class="label label-info">Total Books Read:{{ total_book }}</span></h1>
+            <h1><span class="label label-info">Total Authors Read:{{ user_books | count  }}</span></h1>
+            <h1><span class="label label-info">Total Male Authors Read:{{ gender_analysis["male"] }}</span></h1>
+            <h1><span class="label label-info">Total Female Authors Read:{{ gender_analysis["female"] }}</span></h1>
+		</div>
+		<div class="col-md-6">
+            <h1><span class="label label-info">Country Wise Distribution</span></h1>
+         <div class="col-xs-12" style="height:50px;"></div>
+<canvas id="chart" width="600" height="400"></canvas>
+    {% block scripts %}
+    <!-- import plugin script -->
+<script>
+   // bar chart data
+   var barData = {
+   labels : [{% for item in labels %}
+                  "{{item}}",
+              {% endfor %}],
+   datasets : [
+      {
+            fillColor: "rgba(87 ,194, 30,0.4)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(151,187,205,1)",
+         data : [{% for item in values %}
+                      {{item}},
+                    {% endfor %}]
+      }
+      ]
+   }
+
+   // get bar chart canvas
+   var mychart = document.getElementById("chart").getContext("2d");
+
+   steps = 10
+   max = 50
+   // draw bar chart
+   new Chart(mychart).Bar(barData, {
+        scaleOverride: true,
+        scaleSteps: steps,
+        scaleStepWidth: Math.ceil(max / steps),
+        scaleStartValue: 0,
+        scaleShowVerticalLines: true,
+        scaleShowGridLines : true,
+        barShowStroke : true,
+        scaleShowLabels: true
+   });
+
+</script>
+{% endblock %}
+		</div>
+	</div>
+</div>
+{%  endblock %}

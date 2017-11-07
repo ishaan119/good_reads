@@ -3,7 +3,7 @@ from flask import current_app, url_for, request, redirect, session
 import xmltodict
 from goodreads.author import GoodreadsAuthor
 from goodreads.book import GoodreadsBook
-from data.models import Author, db
+from data.models import Author, db, Book
 from utils.helper import get_author_country
 from goodreads.friend import GoodreadFriend
 import requests
@@ -131,27 +131,6 @@ class GoodReadsSignIn(OAuthSignIn):
                                                       'shelf': 'read', 'per_page': 200})
         return xmltodict.parse(me.content)
 
-    def get_author_info(self, author_id, request_token, request_secret):
-        author_data = Author.query.filter_by(gid=author_id).first()
-        if not author_data:
-            oauth_session = self.service.get_session(
-                (request_token,
-                 request_secret)
-            )
-            me = oauth_session.get('/author/show.xml', params={'id': author_id})
-            r = GoodreadsAuthor(xmltodict.parse(me.content)['GoodreadsResponse']['author'])
-            country = get_author_country(r.hometown)
-            author_data = Author(gid=r.gid, name=r.name, about=r.about, born_at=r.born_at,
-                                 died_at=r.died_at, fans_count=r.fans_count, gender=r.gender,
-                                 hometown=r.hometown, works_count=r.works_count, image_url=r.image_url,
-                                 country=country, books=r.books)
-            db.session.add(author_data)
-            db.session.commit()
-            author_data = Author.query.filter_by(gid=author_id).first()
-            return author_data
-        else:
-            return author_data
-
     def get_user_friends(self,request_token, request_secret, user_id):
         oauth_session = self.service.get_session(
             (request_token,
@@ -185,10 +164,46 @@ def search_books(q, page=1, search_field='all'):
     return search_results
 
 
-def get_book_info(book_id=None, isbn=None):
+def get_reco_book():
+    book_data = Book.query.first()
+    author_info = Author.query.filter_by(gid=book_data.author_gid)
+    return [book_data, author_info]
+
+
+def get_book_info(book_id):
     """Get info about a book"""
-    if book_id:
+    book_data = Book.query.filter_by(gid=book_id).first()
+    if not book_data:
         resp = requests.get("https://www.goodreads.com/book/show", {'id': book_id,
                                                                     'key':current_app.config['OAUTH_CREDENTIALS']['goodreads']['id']})
-        content = xmltodict.parse(resp.content)['GoodreadsResponse']
-        return GoodreadsBook(content['book'])
+        r = GoodreadsBook(xmltodict.parse(resp.content)['GoodreadsResponse']['book'])
+        author_data = get_author_info(r.authors[0].gid)
+        book_data = Book(gid=r.gid, isbn=r.isbn, isbn13=r.isbn13, title=r.title,
+                           description= r.description, publication=r.publication_date,
+                           image_url=r.image_url, pages=r.num_pages, ratings_count=r.ratings_count,
+                           average_rating=r.average_rating, language=r.language_code, author_gid=author_data.gid)
+        db.session.add(book_data)
+        db.session.commit()
+        book_data = Book.query.filter_by(gid=book_id).first()
+        return book_data
+    else:
+        return book_data
+
+
+def get_author_info(author_id):
+    author_data = Author.query.filter_by(gid=author_id).first()
+    if not author_data:
+        me = requests.get('https://www.goodreads.com/author/show.xml', params={'id': author_id,
+                                                                               'key': current_app.config['OAUTH_CREDENTIALS']['goodreads']['id']})
+        r = GoodreadsAuthor(xmltodict.parse(me.content)['GoodreadsResponse']['author'])
+        country = get_author_country(r.hometown)
+        author_data = Author(gid=r.gid, name=r.name, about=r.about, born_at=r.born_at,
+                             died_at=r.died_at, fans_count=r.fans_count, gender=r.gender,
+                             hometown=r.hometown, works_count=r.works_count, image_url=r.image_url,
+                             country=country, books=r.books)
+        db.session.add(author_data)
+        db.session.commit()
+        author_data = Author.query.filter_by(gid=author_id).first()
+        return author_data
+    else:
+        return author_data

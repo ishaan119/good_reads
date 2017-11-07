@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, flash,session,request
 from flask_sqlalchemy import SQLAlchemy
-from oauth import OAuthSignIn, search_books, get_book_info
+from oauth import OAuthSignIn, search_books, get_book_info, get_author_info, get_reco_book
 from flask_bootstrap import Bootstrap
 from nav import nav, navitems
 from flask_nav.elements import Navbar, View
@@ -60,6 +60,7 @@ class Book(db.Model):
     author_gid = db.Column(db.Integer, db.ForeignKey(
         'author.gid'))
 
+
 @app.route('/')
 def index():
     if 'user_id1' in session:
@@ -98,10 +99,9 @@ def user_profile():
                 books_read[review['book']['authors']['author']['name']] = [review['book']['title']]
     else:
         app.logger.info("No books found for the user_id: " + user.name)
-    authors = []
     gender_analysis = {'male': 0, 'female': 0, 'ath_c': {}}
     for author_name in book_author:
-        author_info = oauth.get_author_info(book_author[author_name], user.request_token, user.request_secret)
+        author_info = get_author_info(book_author[author_name])
         if author_info.gender == 'male':
             gender_analysis['male'] += 1
         else:
@@ -117,10 +117,12 @@ def user_profile():
         labels.append(key)
         values.append(gender_analysis['ath_c'][key])
 
+    book_reco, author_info = get_reco_book()
     app.logger.info("For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name, len(review_list), gender_analysis))
     register_element(nav, navitems)
-    return render_template('profile.html', user_books=books_read, total_book=len(review_list),
-                           gender_analysis=gender_analysis, values=values, labels=labels)
+    return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),
+                           gender_analysis=gender_analysis, values=values, labels=labels,
+                           reco_book=book_reco, author_info=author_info)
     # return jsonify(user_books)
 
 
@@ -214,10 +216,10 @@ def recommend_book():
     if request.method == "POST":
         print request.form['search']
         books = search_books(request.form['search'])
-        return render_template('recommend_book.html', nav=nav.elems, books=books)
+        return render_template('recommend_book.html', nav=nav.elems, books=books, reco_successful=False)
     else:
         register_element(nav, navitems)
-        return render_template('recommend_book.html', nav=nav.elems)
+        return render_template('recommend_book.html', nav=nav.elems, reco_successful=False)
 
 
 @app.route('/about')
@@ -228,9 +230,10 @@ def about():
 
 @app.route('/recommendations', methods=['GET', 'POST'])
 def add_recommended_book():
-    book_id =  request.form['reco']
+    book_id = request.form['reco']
     binfo = get_book_info(book_id)
     print binfo
+    return render_template('recommend_book.html', nav=nav.elems, reco_successful=True)
 
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'],host='0.0.0.0')

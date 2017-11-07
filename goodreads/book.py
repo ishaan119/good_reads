@@ -1,7 +1,7 @@
 """Goodreads book class"""
 
 import author
-
+from datetime import datetime
 
 class GoodreadsBook:
     def __init__(self, book_dict):
@@ -79,9 +79,10 @@ class GoodreadsBook:
     @property
     def publication_date(self):
         """Publication month/day/year for the book"""
-        return (self._book_dict['publication_month'],
-                self._book_dict['publication_day'],
-                self._book_dict['publication_year'])
+        temp = "{0}/{1}/{2}".format(self._book_dict['publication_year'],
+                                    self._book_dict['publication_month'],
+                                    self._book_dict['publication_day'])
+        return datetime.strptime(temp, '%Y/%m/%d')
 
     @property
     def publisher(self):
