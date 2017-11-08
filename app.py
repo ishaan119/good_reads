@@ -1,12 +1,12 @@
 from flask import Flask, redirect, url_for, render_template, flash,session,request
 from flask_sqlalchemy import SQLAlchemy
-from oauth import OAuthSignIn, search_books, get_book_info, get_author_info, get_reco_book
+from oauth import OAuthSignIn, search_books, get_book_info, analyze_user_books, get_reco_book
 from flask_bootstrap import Bootstrap
 from nav import nav, navitems
 from flask_nav.elements import Navbar, View
 import config
 import newrelic.agent
-
+import ast
 
 app = Flask(__name__)
 config.configure_app(app)
@@ -71,6 +71,7 @@ def index():
 
 def register_element(nav1, navitems1):
     if 'user_id1' in session:
+        navitems1 = (navitems1 + [View('Friends', '.get_friends')])
         navitems1 = (navitems1 + [View('Logout', '.logout')])
     return nav1.register_element('frontend_top', Navbar(*navitems1))
 
@@ -84,33 +85,8 @@ def get_user(user_id):
 def user_profile():
     user_id = session['user_id1']
     user = get_user(user_id)
-    oauth = OAuthSignIn.get_provider('goodreads')
-    user_books = oauth.get_user_books(user.request_token,user.request_secret,user.oauth_token,user.user_id)
-    books_read = {}
-    book_author = {}
-    review_list = []
-    if 'review' in user_books['GoodreadsResponse']['reviews']:
-        review_list = user_books['GoodreadsResponse']['reviews']['review']
-        for review in review_list:
-            book_author[review['book']['authors']['author']['name']] = review['book']['authors']['author']['id']
-            if review['book']['authors']['author']['name'] in books_read:
-                books_read[review['book']['authors']['author']['name']].append(review['book']['title'])
-            else:
-                books_read[review['book']['authors']['author']['name']] = [review['book']['title']]
-    else:
-        app.logger.info("No books found for the user_id: " + user.name)
-    gender_analysis = {'male': 0, 'female': 0, 'ath_c': {}}
-    for author_name in book_author:
-        author_info = get_author_info(book_author[author_name])
-        if author_info.gender == 'male':
-            gender_analysis['male'] += 1
-        else:
-            gender_analysis['female'] += 1
-        if author_info.country in gender_analysis['ath_c']:
-            gender_analysis['ath_c'][author_info.country] += 1
-        else:
-            gender_analysis['ath_c'][author_info.country] = 1
 
+    review_list, books_read, gender_analysis = analyze_user_books(user)
     labels = []
     values = []
     for key in gender_analysis['ath_c']:
@@ -122,7 +98,7 @@ def user_profile():
     register_element(nav, navitems)
     return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),
                            gender_analysis=gender_analysis, values=values, labels=labels,
-                           reco_book=book_reco, author_info=author_info)
+                           reco_book=book_reco, author_info=author_info, friend=False)
     # return jsonify(user_books)
 
 
@@ -202,13 +178,43 @@ def oauth_callback(provider):
     return redirect(url_for('user_profile'))
 
 
-@app.route('/get_friend/stats')
-def get_friend_stats():
+@app.route('/get_friends')
+def get_friends():
     user_id = session['user_id1']
     user = get_user(user_id)
     oauth = OAuthSignIn.get_provider('goodreads')
     user_friends = oauth.get_user_friends(user.request_token, user.request_secret, user_id)
-    print user_friends
+    f_list = []
+    for fr in user_friends:
+        tt_dic = {}
+        tt_dic['name'] = fr.friend_name
+        tt_dic['image_url'] = fr.image
+        tt_dic['friend_id'] = fr.friend_id
+        f_list.append(tt_dic)
+    register_element(nav, navitems)
+    return render_template('friend_list.html', nav=nav.elems, friends=f_list)
+
+
+@app.route('/get_friend_stats', methods=['GET', 'POST'])
+def get_friend_stats():
+    user_id = session['user_id1']
+    user = get_user(user_id)
+    friend = ast.literal_eval(request.form['friend'])
+
+    review_list, books_read, gender_analysis = analyze_user_books(user, friend['friend_id'])
+    labels = []
+    values = []
+    for key in gender_analysis['ath_c']:
+        labels.append(key)
+        values.append(gender_analysis['ath_c'][key])
+
+    book_reco, author_info = get_reco_book()
+    app.logger.info(
+        "For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name, len(review_list), gender_analysis))
+    register_element(nav, navitems)
+    return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),
+                           gender_analysis=gender_analysis, values=values, labels=labels,
+                           reco_book=book_reco, author_info=author_info, friend=True, finfo=friend)
 
 
 @app.route('/recommend/book/', methods=['GET','POST'])
@@ -231,9 +237,20 @@ def about():
 @app.route('/recommendations', methods=['GET', 'POST'])
 def add_recommended_book():
     book_id = request.form['reco']
-    binfo = get_book_info(book_id)
-    print binfo
+    get_book_info(book_id)
     return render_template('recommend_book.html', nav=nav.elems, reco_successful=True)
+
+
+@app.route('/feedback', methods=['GET', 'POST'])
+def feedback():
+    register_element(nav, navitems)
+    if request.method == "POST":
+        app.logger.info("Name: {0}, Email: {1}, Message:{2}".format(request.form['Name'],
+                                                                    request.form['email'],
+                                                                    request.form['Message']))
+        return render_template('feedback.html', nav=nav.elems, feedback_successful=True)
+    else:
+        return render_template('feedback.html', nav=nav.elems, feedback_successful=False)
 
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'],host='0.0.0.0')

@@ -137,10 +137,9 @@ class GoodReadsSignIn(OAuthSignIn):
              request_secret)
         )
         me = oauth_session.get('/friend/user.xml', params={'id': user_id})
-        friends = [friend.GoodreadFriend(user)
-         for user in resp['friends']['user']]
-        friends = GoodreadFriend(xmltodict.parse(me.content)['GoodreadsResponse']['friends'])
-        print friends
+        friends = xmltodict.parse(me.content)['GoodreadsResponse']
+        friend_data = [GoodreadFriend(user) for user in friends['friends']['user']]
+        return friend_data
 
 
 def search_books(q, page=1, search_field='all'):
@@ -207,3 +206,38 @@ def get_author_info(author_id):
         return author_data
     else:
         return author_data
+
+
+def analyze_user_books(user, friend_id=None):
+    oauth = OAuthSignIn.get_provider('goodreads')
+    if friend_id is not None:
+        user_id = friend_id
+    else:
+        user_id = user.user_id
+    user_books = oauth.get_user_books(user.request_token, user.request_secret, user.oauth_token, user_id)
+    books_read = {}
+    book_author = {}
+    review_list = []
+    if 'review' in user_books['GoodreadsResponse']['reviews']:
+        review_list = user_books['GoodreadsResponse']['reviews']['review']
+        for review in review_list:
+            book_author[review['book']['authors']['author']['name']] = review['book']['authors']['author']['id']
+            if review['book']['authors']['author']['name'] in books_read:
+                books_read[review['book']['authors']['author']['name']].append(review['book']['title'])
+            else:
+                books_read[review['book']['authors']['author']['name']] = [review['book']['title']]
+    else:
+        current_app.logger.info("No books found for the user_id: " + user.name)
+    gender_analysis = {'male': 0, 'female': 0, 'ath_c': {}}
+    for author_name in book_author:
+        author_info = get_author_info(book_author[author_name])
+        if author_info.gender == 'male':
+            gender_analysis['male'] += 1
+        else:
+            gender_analysis['female'] += 1
+        if author_info.country in gender_analysis['ath_c']:
+            gender_analysis['ath_c'][author_info.country] += 1
+        else:
+            gender_analysis['ath_c'][author_info.country] = 1
+
+    return review_list, books_read, gender_analysis

@@ -1,0 +1,27 @@
+{%- extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="list-group">
+				 <a href="#" class="list-group-item active">Analyze your Friends Books</a>
+                {% for friend in friends %}
+                <div class="row">
+		        <div class="col-md-12">
+			<h3>
+				{{ friend.name }}
+			</h3><img alt="Bootstrap Image Preview" src="{{ friend['image_url'] }}" />
+                    <form action="{{ url_for('get_friend_stats') }}" method=post>
+			        <button type="submit" name="friend" class="btn btn-default" value="{{ friend }}" >
+				        Analyze
+			        </button>
+                    </form>
+		        </div>
+	        </div>
+                {% endfor %}
+            </div>
+		</div>
+	</div>
+
+</div>
+{% endblock %}

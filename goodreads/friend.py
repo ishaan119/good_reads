@@ -14,3 +14,11 @@ class GoodreadFriend():
     @property
     def friend_count(self):
         return self._friend_dict['friends_count']
+
+    @property
+    def link(self):
+        return self._friend_dict['link']
+
+    @property
+    def image(self):
+        return self._friend_dict['image_url']

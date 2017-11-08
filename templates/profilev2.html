@@ -16,7 +16,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                {% if friend %}
+                <h3>{{ finfo['name'] }}'s Book Recommendation</h3>
+                {% else %}
                 <h3>Your Book Recommendation!</h3>
+                {% endif %}
             </div>
             <div class="row">
             <div class="col-md-6">
@@ -57,7 +61,11 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h3 class="text-success text-center">
+                 {% if friend %}
+                {{ finfo['name'] }}'s Goodreads Analysis
+                {% else %}
 				Your Goodreads Analysis
+                {% endif %}
 			</h3>
 		</div>
         <div class="col-xs-12" style="height:50px;"></div>
@@ -115,4 +123,7 @@
 		</div>
 	</div>
 </div>
+    <div class="container-fluid footer navbar-fixed-bottom right">
+        <p>© 2017<a style="color:#0a93a6; text-decoration:none;" href="{{ url_for('feedback') }}"> Feedback</a></p>
+    </div>
 {%  endblock %}
