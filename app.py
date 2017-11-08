@@ -7,6 +7,9 @@ from flask_nav.elements import Navbar, View
 import config
 import newrelic.agent
 import ast
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+
 
 app = Flask(__name__)
 config.configure_app(app)
@@ -15,7 +18,6 @@ if not app.config['ENV'] == 'dev':
 Bootstrap(app)
 nav.init_app(app)
 db = SQLAlchemy(app)
-db.create_all()
 
 
 class User( db.Model):
@@ -59,6 +61,13 @@ class Book(db.Model):
     language = db.Column(db.String, nullable=True)
     author_gid = db.Column(db.Integer, db.ForeignKey(
         'author.gid'))
+
+
+
+admin = Admin(app, name='microblog', template_mode='bootstrap3')
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Author, db.session))
+admin.add_view(ModelView(Book, db.session))
 
 
 @app.route('/')
