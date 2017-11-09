@@ -28,11 +28,11 @@ def __get_loc_using_gmaps(location):
 
 
 def get_author_country(location):
-    location = location.encode("utf-8")
     if location is None:
         current_app.logger.info("Location is non")
         return None
     try:
+        location = location.encode("utf-8")
         temp = __get_loc_using_gmaps(location)
         print temp
         return temp[0]['formatted_address'].split(u',')[-1]
