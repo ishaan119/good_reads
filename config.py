@@ -27,6 +27,7 @@ class DevelopmentConfig(BaseConfig):
     CALLBACK = "http://localhost:5000/callback/goodreads"
     ENV = "dev"
     LOG_LEVEL = 10
+    GOOGLE_GEO_CODE_API_KEY = os.getenv("GOOGLE_GEO_CODE_API_KEY")
 
 
 class TestingConfig(BaseConfig):
@@ -52,6 +53,7 @@ class ProductionConfig(BaseConfig):
     CALLBACK = "http://recommendmebooks.com/callback/goodreads"
     ENV = 'prod'
     LOG_LEVEL = 20
+    GOOGLE_GEO_CODE_API_KEY = os.getenv("GOOGLE_GEO_CODE_API_KEY")
 
 
 config = {

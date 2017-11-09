@@ -63,6 +63,7 @@ class Book(db.Model):
         'author.gid'))
 
 
+db.create_all()
 
 admin = Admin(app, name='microblog', template_mode='bootstrap3')
 admin.add_view(ModelView(User, db.session))
@@ -82,7 +83,7 @@ def register_element(nav1, navitems1):
     if 'user_id1' in session:
         navitems1 = (navitems1 + [View('Friends', '.get_friends')])
         navitems1 = (navitems1 + [View('Logout', '.logout')])
-    return nav1.register_element('frontend_top', Navbar(*navitems1))
+    return nav1.register_element('top', Navbar(*navitems1))
 
 
 def get_user(user_id):
@@ -95,7 +96,7 @@ def user_profile():
     user_id = session['user_id1']
     user = get_user(user_id)
 
-    review_list, books_read, gender_analysis = analyze_user_books(user)
+    review_list, books_read, gender_analysis, fav_author = analyze_user_books(user)
     labels = []
     values = []
     for key in gender_analysis['ath_c']:
@@ -105,7 +106,7 @@ def user_profile():
     book_reco, author_info = get_reco_book()
     app.logger.info("For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name, len(review_list), gender_analysis))
     register_element(nav, navitems)
-    return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),
+    return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),fav_author=fav_author,
                            gender_analysis=gender_analysis, values=values, labels=labels,
                            reco_book=book_reco, author_info=author_info, friend=False)
     # return jsonify(user_books)
@@ -210,7 +211,7 @@ def get_friend_stats():
     user = get_user(user_id)
     friend = ast.literal_eval(request.form['friend'])
 
-    review_list, books_read, gender_analysis = analyze_user_books(user, friend['friend_id'])
+    review_list, books_read, gender_analysis, fav_author = analyze_user_books(user, friend['friend_id'])
     labels = []
     values = []
     for key in gender_analysis['ath_c']:
@@ -223,7 +224,7 @@ def get_friend_stats():
     register_element(nav, navitems)
     return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),
                            gender_analysis=gender_analysis, values=values, labels=labels,
-                           reco_book=book_reco, author_info=author_info, friend=True, finfo=friend)
+                           reco_book=book_reco, author_info=author_info, friend=True, finfo=friend, fav_author=fav_author)
 
 
 @app.route('/recommend/book/', methods=['GET','POST'])

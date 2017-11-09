@@ -240,4 +240,11 @@ def analyze_user_books(user, friend_id=None):
         else:
             gender_analysis['ath_c'][author_info.country] = 1
 
-    return review_list, books_read, gender_analysis
+    # Get favorite auhtor
+    most_books_read_count = 0
+    fav_author = ''
+    for author, books in books_read.items():
+        if len(books) > most_books_read_count:
+            most_books_read_count = len(books)
+            fav_author = author
+    return review_list, books_read, gender_analysis, fav_author
