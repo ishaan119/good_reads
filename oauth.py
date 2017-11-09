@@ -232,6 +232,8 @@ def analyze_user_books(user, friend_id=None):
     review_list = []
     if 'review' in user_books['GoodreadsResponse']['reviews']:
         review_list = user_books['GoodreadsResponse']['reviews']['review']
+        if type(review_list) is not list:
+            review_list = [review_list]
         for review in review_list:
             book_author[review['book']['authors']['author']['name']] = review['book']['authors']['author']['id']
             if review['book']['authors']['author']['name'] in books_read:
