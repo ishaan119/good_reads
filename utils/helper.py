@@ -29,13 +29,13 @@ def __get_loc_using_gmaps(location):
 
 def get_author_country(location):
     if location is None:
+        current_app.logger.info("Location is non")
         return None
     try:
         temp = __get_loc_using_gmaps(location)
         print temp
         return temp[0]['formatted_address'].split(u',')[-1]
     except Exception as e:
-        print e
-        print 'Exception Found for Location'
+        current_app.logger.error('Exception Found for Location {0} with exception {1}'.format(location, e))
         return None
 
