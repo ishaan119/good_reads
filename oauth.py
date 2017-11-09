@@ -127,19 +127,31 @@ class GoodReadsSignIn(OAuthSignIn):
             (request_token,
              request_secret)
         )
-        me = oauth_session.get('/review/list.xml', params={'v': '2', 'id': user_id, 'page': '1',
+        page = 1
+        me = oauth_session.get('/review/list.xml', params={'v': '2', 'id': user_id, 'page': page,
                                                       'shelf': 'read', 'per_page': 200})
-        return xmltodict.parse(me.content)
+        content = xmltodict.parse(me.content)
+        total_books = content['GoodreadsResponse']['reviews']['@total']
+        current_books_at = content['GoodreadsResponse']['reviews']['@end']
+        while total_books > current_books_at:
+            page += 1
+            me = oauth_session.get('/review/list.xml', params={'v': '2', 'id': user_id, 'page': page,
+                                                               'shelf': 'read', 'per_page': 200})
+            cc = xmltodict.parse(me.content)
+            content['GoodreadsResponse']['reviews']['review'].extend(cc['GoodreadsResponse']['reviews']['review'])
+            current_books_at = cc['GoodreadsResponse']['reviews']['@end']
+        return content
 
-    def get_user_friends(self,request_token, request_secret, user_id):
+    def get_user_friends(self,request_token, request_secret, user_id, page=1):
         oauth_session = self.service.get_session(
             (request_token,
              request_secret)
         )
-        me = oauth_session.get('/friend/user.xml', params={'id': user_id})
+        me = oauth_session.get('/friend/user.xml', params={'id': user_id, 'page': page})
         friends = xmltodict.parse(me.content)['GoodreadsResponse']
+        total_friends = friends['friends']['@total']
         friend_data = [GoodreadFriend(user) for user in friends['friends']['user']]
-        return friend_data
+        return friend_data, total_friends
 
 
 def search_books(q, page=1, search_field='all'):

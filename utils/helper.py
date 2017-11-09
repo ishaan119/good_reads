@@ -3,25 +3,6 @@ import time
 from flask import current_app
 
 
-def rateLimited(maxPerSecond):
-    minInterval = 1.0 / float(maxPerSecond)
-
-    def decorate(func):
-        lastTimeCalled = [0.0]
-
-        def rateLimitedFunction(*args, **kargs):
-            elapsed = time.clock() - lastTimeCalled[0]
-            leftToWait = minInterval - elapsed
-            if leftToWait > 0:
-                time.sleep(leftToWait)
-            ret = func(*args, **kargs)
-            lastTimeCalled[0] = time.clock()
-            return ret
-        return rateLimitedFunction
-    return decorate
-
-
-@rateLimited(3)
 def __get_loc_using_gmaps(location):
     api = Geocoding(api_key=current_app.config['GOOGLE_GEO_CODE_API_KEY'])
     return api.geocode(location)
@@ -40,3 +21,10 @@ def get_author_country(location):
         current_app.logger.error('Exception Found for Location {0} with exception {1}'.format(location, e))
         return None
 
+
+# Create a function called "chunks" with two arguments, l and n:
+def chunks(l, n):
+    # For item i in a range that is a length of l,
+    for i in range(0, len(l), n):
+        # Create an index range for l of n items:
+        yield l[i:i+n]

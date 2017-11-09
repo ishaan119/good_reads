@@ -9,7 +9,8 @@ import newrelic.agent
 import ast
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-
+from utils.helper import chunks
+import math
 
 app = Flask(__name__)
 config.configure_app(app)
@@ -192,8 +193,11 @@ def oauth_callback(provider):
 def get_friends():
     user_id = session['user_id1']
     user = get_user(user_id)
+    page_no = 1
+    if request.args.get('page'):
+        page_no = request.args.get('page')
     oauth = OAuthSignIn.get_provider('goodreads')
-    user_friends = oauth.get_user_friends(user.request_token, user.request_secret, user_id)
+    user_friends, total_friends = oauth.get_user_friends(user.request_token, user.request_secret, user_id, page_no)
     f_list = []
     for fr in user_friends:
         tt_dic = {}
@@ -201,8 +205,10 @@ def get_friends():
         tt_dic['image_url'] = fr.image
         tt_dic['friend_id'] = fr.friend_id
         f_list.append(tt_dic)
+    chunk_f_list = list(chunks(f_list, 4))
+    total_pages = int(math.ceil(float(total_friends)/30.0))
     register_element(nav, navitems)
-    return render_template('friend_list.html', nav=nav.elems, friends=f_list)
+    return render_template('friend_list.html', nav=nav.elems, friends=chunk_f_list, pages=total_pages)
 
 
 @app.route('/get_friend_stats', methods=['GET', 'POST'])
