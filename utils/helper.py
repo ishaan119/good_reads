@@ -28,6 +28,7 @@ def __get_loc_using_gmaps(location):
 
 
 def get_author_country(location):
+    location = location.encode("utf-8")
     if location is None:
         current_app.logger.info("Location is non")
         return None
