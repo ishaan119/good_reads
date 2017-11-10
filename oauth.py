@@ -88,10 +88,10 @@ class GoodReadsSignIn(OAuthSignIn):
             name='goodreads',
             consumer_key=self.consumer_id,
             consumer_secret=self.consumer_secret,
-            request_token_url='http://www.goodreads.com/oauth/request_token',
-            authorize_url='http://www.goodreads.com/oauth/authorize',
-            access_token_url='http://www.goodreads.com/oauth/access_token',
-            base_url='http://www.goodreads.com/'
+            request_token_url='https://www.goodreads.com/oauth/request_token',
+            authorize_url='https://www.goodreads.com/oauth/authorize',
+            access_token_url='https://www.goodreads.com/oauth/access_token',
+            base_url='https://www.goodreads.com/'
         )
 
     @property
@@ -212,8 +212,12 @@ def get_author_info(author_id):
                              died_at=r.died_at, fans_count=r.fans_count, gender=r.gender,
                              hometown=r.hometown, works_count=r.works_count, image_url=r.image_url,
                              country=country, books=r.books)
-        db.session.add(author_data)
-        db.session.commit()
+        try:
+            db.session.add(author_data)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error("Error while commiting to DB with err: {0}".format(e))
         author_data = Author.query.filter_by(gid=author_id).first()
         return author_data
     else:
@@ -245,6 +249,8 @@ def analyze_user_books(user, friend_id=None):
     gender_analysis = {'male': 0, 'female': 0, 'ath_c': {}}
     for author_name in book_author:
         author_info = get_author_info(book_author[author_name])
+        if author_info is None:
+            continue
         if author_info.gender == 'male':
             gender_analysis['male'] += 1
         else:
