@@ -131,15 +131,15 @@ class GoodReadsSignIn(OAuthSignIn):
         me = oauth_session.get('/review/list.xml', params={'v': '2', 'id': user_id, 'page': page,
                                                       'shelf': 'read', 'per_page': 200})
         content = xmltodict.parse(me.content)
-        total_books = content['GoodreadsResponse']['reviews']['@total']
-        current_books_at = content['GoodreadsResponse']['reviews']['@end']
+        total_books = int(content['GoodreadsResponse']['reviews']['@total'])
+        current_books_at = int(content['GoodreadsResponse']['reviews']['@end'])
         while total_books > current_books_at:
             page += 1
             me = oauth_session.get('/review/list.xml', params={'v': '2', 'id': user_id, 'page': page,
                                                                'shelf': 'read', 'per_page': 200})
             cc = xmltodict.parse(me.content)
             content['GoodreadsResponse']['reviews']['review'].extend(cc['GoodreadsResponse']['reviews']['review'])
-            current_books_at = cc['GoodreadsResponse']['reviews']['@end']
+            current_books_at = int(cc['GoodreadsResponse']['reviews']['@end'])
         return content
 
     def get_user_friends(self,request_token, request_secret, user_id, page=1):

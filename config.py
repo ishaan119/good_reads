@@ -69,7 +69,7 @@ def configure_app(app):
     app.config.from_object(config[config_name])
     # app.config.from_envvar('FLASK_CONFIG')
 
-    handler = RotatingFileHandler('rcm.log', maxBytes=10000, backupCount=1)
+    handler = RotatingFileHandler('rcm.log', maxBytes=1000000, backupCount=1)
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
     app.logger.setLevel(app.config['LOG_LEVEL'])
