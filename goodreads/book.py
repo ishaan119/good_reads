@@ -79,9 +79,16 @@ class GoodreadsBook:
     @property
     def publication_date(self):
         """Publication month/day/year for the book"""
+        if self._book_dict['publication_year'] is None:
+            return None
+        if self._book_dict['publication_month'] is None:
+            self._book_dict['publication_month'] = "01"
+        if self._book_dict['publication_day'] is None:
+            self._book_dict['publication_day'] = "01"
         temp = "{0}/{1}/{2}".format(self._book_dict['publication_year'],
                                     self._book_dict['publication_month'],
                                     self._book_dict['publication_day'])
+
         return datetime.strptime(temp, '%Y/%m/%d')
 
     @property
