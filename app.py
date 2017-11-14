@@ -254,6 +254,7 @@ def about():
 def add_recommended_book():
     book_id = request.form['reco']
     get_book_info(book_id)
+    register_element(nav, navitems)
     return render_template('recommend_book.html', nav=nav.elems, reco_successful=True)
 
 
