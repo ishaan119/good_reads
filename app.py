@@ -72,10 +72,17 @@ admin.add_view(ModelView(Author, db.session))
 admin.add_view(ModelView(Book, db.session))
 
 
+def user_logged_in():
+    if 'user_id1' in session:
+        return True
+    return False
+
+
 @app.route('/')
 def index():
     if 'user_id1' in session:
         return redirect(url_for('user_profile'))
+    app.logger.info("Index page loaded")
     register_element(nav, navitems)
     return render_template('index.html', nav=nav.elems)
 
@@ -94,6 +101,10 @@ def get_user(user_id):
 
 @app.route('/profile')
 def user_profile():
+    register_element(nav, navitems)
+    if not user_logged_in():
+        return render_template('index.html', nav=nav.elems)
+
     user_id = session['user_id1']
     user = get_user(user_id)
 
@@ -106,7 +117,6 @@ def user_profile():
 
     book_reco, author_info = get_reco_book()
     app.logger.info("For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name, len(review_list), gender_analysis))
-    register_element(nav, navitems)
     return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),fav_author=fav_author,
                            gender_analysis=gender_analysis, values=values, labels=labels,
                            reco_book=book_reco, author_info=author_info, friend=False)
@@ -191,6 +201,9 @@ def oauth_callback(provider):
 
 @app.route('/get_friends')
 def get_friends():
+    register_element(nav, navitems)
+    if not user_logged_in():
+        return render_template('index.html', nav=nav.elems)
     user_id = session['user_id1']
     user = get_user(user_id)
     page_no = 1
@@ -207,12 +220,15 @@ def get_friends():
         f_list.append(tt_dic)
     chunk_f_list = list(chunks(f_list, 4))
     total_pages = int(math.ceil(float(total_friends)/30.0))
-    register_element(nav, navitems)
+    app.logger.info("For username:{0}, loaded friends page: {1}, with total friends: {2}".format(user.name, page_no, total_friends))
     return render_template('friend_list.html', nav=nav.elems, friends=chunk_f_list, pages=total_pages)
 
 
 @app.route('/get_friend_stats', methods=['GET', 'POST'])
 def get_friend_stats():
+    register_element(nav, navitems)
+    if not user_logged_in():
+        return render_template('index.html', nav=nav.elems)
     user_id = session['user_id1']
     user = get_user(user_id)
     friend = ast.literal_eval(request.form['friend'])
@@ -227,7 +243,6 @@ def get_friend_stats():
     book_reco, author_info = get_reco_book()
     app.logger.info(
         "For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name, len(review_list), gender_analysis))
-    register_element(nav, navitems)
     return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),
                            gender_analysis=gender_analysis, values=values, labels=labels,
                            reco_book=book_reco, author_info=author_info, friend=True, finfo=friend, fav_author=fav_author)
@@ -236,22 +251,26 @@ def get_friend_stats():
 @app.route('/recommend/book/', methods=['GET','POST'])
 def recommend_book():
     if request.method == "POST":
+        app.logger.info("Book recommendations search")
         print request.form['search']
         books = search_books(request.form['search'])
         return render_template('recommend_book.html', nav=nav.elems, books=books, reco_successful=False)
     else:
+        app.logger.info("Book recommendations page loaded")
         register_element(nav, navitems)
         return render_template('recommend_book.html', nav=nav.elems, reco_successful=False)
 
 
 @app.route('/about')
 def about():
+    app.logger.info("About Page loaded")
     register_element(nav, navitems)
     return render_template('about.html', nav=nav.elems)
 
 
 @app.route('/recommendations', methods=['GET', 'POST'])
 def add_recommended_book():
+    app.logger.info("Book recommendations added")
     book_id = request.form['reco']
     get_book_info(book_id)
     register_element(nav, navitems)

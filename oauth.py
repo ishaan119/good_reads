@@ -193,8 +193,12 @@ def get_book_info(book_id):
                            description= r.description, publication=r.publication_date,
                            image_url=r.image_url, pages=r.num_pages, ratings_count=r.ratings_count,
                            average_rating=r.average_rating, language=r.language_code, author_gid=author_data.gid)
-        db.session.add(book_data)
-        db.session.commit()
+        try:
+            db.session.add(book_data)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error("Error while commiting to DB with err: {0}".format(e))
         book_data = Book.query.filter_by(gid=book_id).first()
         return book_data
     else:
