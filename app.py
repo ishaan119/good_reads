@@ -12,7 +12,7 @@ from flask_admin.contrib.sqla import ModelView
 from utils.helper import chunks
 import math
 from flask_admin.contrib import sqla
-from flask_admin.contrib.sqla import filters
+from flask.ext.admin.contrib.sqla.view import func
 
 
 app = Flask(__name__)
@@ -77,6 +77,9 @@ class AuthorAdmin(sqla.ModelView):
 
     def get_query(self):
         return self.session.query(self.model).filter(self.model.country == None)
+
+    def get_count_query(self):
+        return self.session.query(func.count('*')).filter(self.model.country == None)
 
     def __init__(self, session):
         # Just call parent class with predefined model.
