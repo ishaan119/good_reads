@@ -11,6 +11,9 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from utils.helper import chunks
 import math
+from flask_admin.contrib import sqla
+from flask_admin.contrib.sqla import filters
+
 
 app = Flask(__name__)
 config.configure_app(app)
@@ -66,9 +69,24 @@ class Book(db.Model):
 
 db.create_all()
 
-admin = Admin(app, name='microblog', template_mode='bootstrap3')
+
+# Customized Post model admin
+class AuthorAdmin(sqla.ModelView):
+    column_searchable_list = ['country']
+    column_editable_list = ['country']
+
+    def get_query(self):
+        return self.session.query(self.model).filter(self.model.country == None)
+
+    def __init__(self, session):
+        # Just call parent class with predefined model.
+        super(AuthorAdmin, self).__init__(Author, session, name='Update Author', endpoint='auth_country')
+
+
+admin = Admin(app, name='Dashboard', template_mode='bootstrap3')
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Author, db.session))
+admin.add_view(AuthorAdmin(db.session))
 admin.add_view(ModelView(Book, db.session))
 
 
