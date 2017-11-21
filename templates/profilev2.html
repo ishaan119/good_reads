@@ -2,6 +2,8 @@
 {% block content %}
     <!DOCTYPE html>
     <script src={{ url_for('static', filename='Chart.min.js') }}></script>
+    <script src={{ url_for('static', filename='timeknots-min.js') }}></script>
+    <script src={{ url_for('static', filename='d3.v2.min.js') }}></script>
 
 <head>
 
@@ -70,21 +72,55 @@
 		</div>
         <div class="col-xs-12" style="height:50px;"></div>
 	</div>
+    <div class="row">
+		<div class="col-md-6">
+            <h1><span class="label label-info">Most Read Author :{{ fav_author }}</span></h1>
+        </div>
+        <div class="col-md-6">
+            <h1><span class="label label-info">Total Unique Authors Read:{{ user_books | count  }}</span></h1>
+        </div>
+		</div>
+    <div class="row">
+    <div class="col-md-6">
+            <h1><span class="label label-info">Total Female Authors Read:{{ gender_analysis["female"] }}</span></h1>
+        </div>
+        <div class="col-md-6">
+            <h1><span class="label label-info">Total Male Authors Read:{{ gender_analysis["male"] }}</span></h1>
+        </div>
+	</div>
+    <div class="col-xs-12" style="height:50px;"></div>
 	<div class="row">
 		<div class="col-md-6">
-            <h1><span class="label label-info">Total Books Read:{{ total_book }}</span></h1>
-            <h1><span class="label label-info">Total Authors Read:{{ user_books | count  }}</span></h1>
-            <h1><span class="label label-info">Total Male Authors Read:{{ gender_analysis["male"] }}</span></h1>
-            <h1><span class="label label-info">Total Female Authors Read:{{ gender_analysis["female"] }}</span></h1>
-            <h1><span class="label label-info">Favorite Author :{{ fav_author }}</span></h1>
+            <h1><span class="label label-info">Books read Publication Time Line</span></h1>
+            <canvas id="line-chart" width="600" height="400"></canvas>
 		</div>
 		<div class="col-md-6">
             <h1><span class="label label-info">Country Wise Distribution</span></h1>
             <h3><span class="label label-info">You have read books from {{ labels|length }} countries out of 195</span></h3>
-<canvas id="chart" width="600" height="500"></canvas>
+<canvas id="chart" width="600" height="400"></canvas>
+
+
     {% block scripts %}
-    <!-- import plugin script -->
-<script>
+        <script>
+
+    // line-chart
+    var lineBarData = {
+        labels : [{% for item in timeline %}
+                  "{{ item[0] - (item[0] % 10) }}",
+              {% endfor %}],
+    datasets : [
+        {
+         data : [
+             {% for item in timeline %}
+                  "{{ item|length }}",
+              {% endfor %}
+         ]
+        }
+    ]
+    }
+
+    var lineChart = document.getElementById("line-chart").getContext("2d");
+    new Chart(lineChart).Line(lineBarData);
    // bar chart data
    var barData = {
    labels : [{% for item in labels %}
@@ -121,6 +157,7 @@
 
 </script>
 {% endblock %}
+
 		</div>
 	</div>
 </div>

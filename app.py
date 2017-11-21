@@ -13,7 +13,7 @@ from utils.helper import chunks
 import math
 from flask_admin.contrib import sqla
 from flask.ext.admin.contrib.sqla.view import func
-
+from itertools import groupby
 
 app = Flask(__name__)
 config.configure_app(app)
@@ -129,9 +129,10 @@ def user_profile():
     user_id = session['user_id1']
     user = get_user(user_id)
 
-    review_list, books_read, gender_analysis, fav_author = analyze_user_books(user)
+    review_list, books_read, gender_analysis, fav_author, sorted_pub_year = analyze_user_books(user)
     labels = []
     values = []
+    time_ss = [list(g) for k,g in groupby(sorted_pub_year, lambda i: i // 10)]
     for key in gender_analysis['ath_c']:
         labels.append(key)
         values.append(gender_analysis['ath_c'][key])
@@ -140,7 +141,7 @@ def user_profile():
     app.logger.info("For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name, len(review_list), gender_analysis))
     return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),fav_author=fav_author,
                            gender_analysis=gender_analysis, values=values, labels=labels,
-                           reco_book=book_reco, author_info=author_info, friend=False)
+                           reco_book=book_reco, author_info=author_info, friend=False, timeline=time_ss)
     # return jsonify(user_books)
 
 
@@ -204,7 +205,7 @@ def analyze_books_read():
 def oauth_callback(provider):
     oauth = OAuthSignIn.get_provider(provider)
     user_dict = oauth.callback()
-    if user_dict is None:
+    if user_dict[0] is None:
         app.logger.warning("Authentication failed")
         flash('Authentication failed.')
         return redirect(url_for('index'))
@@ -254,9 +255,10 @@ def get_friend_stats():
     user = get_user(user_id)
     friend = ast.literal_eval(request.form['friend'])
 
-    review_list, books_read, gender_analysis, fav_author = analyze_user_books(user, friend['friend_id'])
+    review_list, books_read, gender_analysis, fav_author, sorted_pub_year = analyze_user_books(user, friend['friend_id'])
     labels = []
     values = []
+    time_ss = [list(g) for k, g in groupby(sorted_pub_year, lambda i: i // 10)]
     for key in gender_analysis['ath_c']:
         labels.append(key)
         values.append(gender_analysis['ath_c'][key])
@@ -266,7 +268,7 @@ def get_friend_stats():
         "For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name, len(review_list), gender_analysis))
     return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),
                            gender_analysis=gender_analysis, values=values, labels=labels,
-                           reco_book=book_reco, author_info=author_info, friend=True, finfo=friend, fav_author=fav_author)
+                           reco_book=book_reco, author_info=author_info, friend=True, finfo=friend, fav_author=fav_author, timeline=time_ss)
 
 
 @app.route('/recommend/book/', methods=['GET','POST'])

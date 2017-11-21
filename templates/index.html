@@ -8,46 +8,18 @@
     <div id="content">
 
      <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="carousel slide" id="carousel-780149">
-				<ol class="carousel-indicators">
-					<li class="active" data-slide-to="0" data-target="#carousel-780149">
-					</li>
-					<li data-slide-to="1" data-target="#carousel-780149">
-					</li>
-					<li data-slide-to="2" data-target="#carousel-780149">
-					</li>
-				</ol>
-				<div class="carousel-inner">
-					<div class="item active">
-						<img alt="Carousel Bootstrap First" src=" {{ url_for('static', filename='gg_cc1.png') }}" />
-						<div class="carousel-caption">
-						</div>
-					</div>
-					<div class="item">
-						<img alt="Carousel Bootstrap Second" src="{{ url_for('static', filename='gg_reco.png') }}" />
-						<div class="carousel-caption">
-						</div>
-					</div>
-					<div class="item">
-						<img alt="Carousel Bootstrap Third" src="{{ url_for('static', filename='gg_ad.png') }}" />
-					</div>
-				</div> <a class="left carousel-control" href="#carousel-780149" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-780149" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-			</div>
-		</div>
-	</div>
+
         <div class="row">
             <div class="box">
                 <div class="col-lg-12">
                     <hr>
-                    <h2 class="intro-text text-center"> Log In
-                        <strong> Using Goodreads</strong>
+                    <h2 class="intro-text text-center">
+                        <strong> Analyze your and your friends books and a lot more</strong>
                     </h2>
                     <hr>
                 </div>
                 <div class="col-lg-12 text-center">
-                    <p>Analyze your and your friends books and a lot more</p>
+                    <p>Log In using Goodreads</p>
                 </div>
                 <div class="button text-center">
                       <a href="{{ url_for('oauth_authorize', provider='goodreads') }}" class="btn btn-default btn-lg" onclick="loading();">Login</a>

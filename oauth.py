@@ -109,7 +109,7 @@ class GoodReadsSignIn(OAuthSignIn):
             current_app.logger.error("Error validating oauth")
             return None
         request_token = session.pop('request_token')
-        if 'oauth_token' not in request.args:
+        if 'oauth_token' not in request.args or request.args['authorize'] == '0':
             return None, None, None
         oauth_session = self.service.get_auth_session(
             request_token[0],
@@ -238,12 +238,17 @@ def analyze_user_books(user, friend_id=None):
     books_read = {}
     book_author = {}
     review_list = []
+    books_published_timeline = []
     if 'review' in user_books['GoodreadsResponse']['reviews']:
         review_list = user_books['GoodreadsResponse']['reviews']['review']
         if type(review_list) is not list:
             review_list = [review_list]
         for review in review_list:
+            temp = {}
             book_author[review['book']['authors']['author']['name']] = review['book']['authors']['author']['id']
+            book_data = GoodreadsBook(review['book'])
+            if book_data.publication_date is not None:
+                books_published_timeline.append(book_data.publication_date.year)
             if review['book']['authors']['author']['name'] in books_read:
                 books_read[review['book']['authors']['author']['name']].append(review['book']['title'])
             else:
@@ -271,4 +276,4 @@ def analyze_user_books(user, friend_id=None):
         if len(books) > most_books_read_count:
             most_books_read_count = len(books)
             fav_author = author
-    return review_list, books_read, gender_analysis, fav_author
+    return review_list, books_read, gender_analysis, fav_author, sorted(books_published_timeline)
