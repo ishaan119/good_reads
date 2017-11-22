@@ -88,8 +88,10 @@ class GoodreadsBook:
         temp = "{0}/{1}/{2}".format(self._book_dict['publication_year'],
                                     self._book_dict['publication_month'],
                                     self._book_dict['publication_day'])
-
-        return datetime.strptime(temp, '%Y/%m/%d')
+        try:
+            return datetime.strptime(temp, '%Y/%m/%d')
+        except:
+            return None
 
     @property
     def publisher(self):
