@@ -110,6 +110,7 @@ class GoodReadsSignIn(OAuthSignIn):
             return None
         request_token = session.pop('request_token')
         if 'oauth_token' not in request.args or request.args['authorize'] == '0':
+            current_app.logger.info("Oauth failed")
             return None, None, None
         oauth_session = self.service.get_auth_session(
             request_token[0],

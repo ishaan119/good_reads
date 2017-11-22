@@ -205,7 +205,7 @@ def analyze_books_read():
 def oauth_callback(provider):
     oauth = OAuthSignIn.get_provider(provider)
     user_dict = oauth.callback()
-    if user_dict[0] is None:
+    if user_dict['oauth_token'] is None:
         app.logger.warning("Authentication failed")
         flash('Authentication failed.')
         return redirect(url_for('index'))
