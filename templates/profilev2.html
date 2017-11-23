@@ -1,9 +1,5 @@
 {%- extends "base.html" %}
 {% block content %}
-    <!DOCTYPE html>
-    <script src={{ url_for('static', filename='Chart.min.js') }}></script>
-    <script src={{ url_for('static', filename='timeknots-min.js') }}></script>
-    <script src={{ url_for('static', filename='d3.v2.min.js') }}></script>
 
 <head>
 
@@ -99,10 +95,19 @@
             <h3><span class="label label-info">You have read books from {{ labels|length }} countries out of 195</span></h3>
 <canvas id="chart" width="600" height="400"></canvas>
 
+		</div>
+	</div>
+</div>
+    <div class="container-fluid footer navbar-fixed-bottom right">
+        <p>© 2017<a style="color:#0a93a6; text-decoration:none;" href="{{ url_for('feedback') }}"> Feedback</a></p>
+    </div>
+{%  endblock %}
 
-    {% block scripts %}
-        <script>
-
+{% block scripts %}
+    <script src={{ url_for('static', filename='Chart.min.js')}}></script>
+    {{ super() }}
+     <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script>
     // line-chart
     var lineBarData = {
         labels : [{% for item in timeline %}
@@ -154,14 +159,5 @@
         barShowStroke : true,
         scaleShowLabels: true
    });
-
-</script>
+   </script>
 {% endblock %}
-
-		</div>
-	</div>
-</div>
-    <div class="container-fluid footer navbar-fixed-bottom right">
-        <p>© 2017<a style="color:#0a93a6; text-decoration:none;" href="{{ url_for('feedback') }}"> Feedback</a></p>
-    </div>
-{%  endblock %}

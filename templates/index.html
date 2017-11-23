@@ -1,8 +1,6 @@
 {%- extends "base.html" %}
-{% import "bootstrap/utils.html" as utils %}
+
 {% block content %}
-    <script src={{ url_for('static', filename='jquery.min.js') }}></script>
-    <script src={{ url_for('static', filename='bootstrap.min.js') }}></script>
 <div class="brand">Recommend Me Books</div>
 <div id="loading"></div>
     <div id="content">
@@ -28,16 +26,18 @@
             </div>
         </div>
  </div>
-    {% block scripts %}
-        <script>
-        function loading(){
-            $("#loading").show();
-            $("#content").hide();
-        }
-        </script>
-        {% endblock %}
     </div>
       <div class="container-fluid footer navbar-fixed-bottom right">
         <p>© 2017<a style="color:#0a93a6; text-decoration:none;" href="{{ url_for('feedback') }}"> Feedback</a></p>
     </div>
 {%  endblock %}
+   {% block scripts %}
+           {{ super() }}
+       <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+        <script>
+        function loading(){
+            $("#loading").show();
+            $("#content").hide();
+        }
+    </script>
+        {% endblock %}

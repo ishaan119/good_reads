@@ -38,6 +38,12 @@
           href="{{url_for('static', filename='business-casual.css')}}">
 {% endblock %}
 
+{% block scripts %}
+  {{ super()}}
+  <script src="{{url_for('static', filename='google_analytics.js')}}">
+{% endblock %}
+
+
 {% block navbar %}
 {{nav.top.render()}}
 {% endblock %}
