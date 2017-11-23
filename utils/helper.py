@@ -16,7 +16,7 @@ def get_author_country(location):
         location = location.encode("utf-8")
         temp = __get_loc_using_gmaps(location)
         print temp
-        return temp[0]['formatted_address'].split(u',')[-1]
+        return temp[0]['formatted_address'].split(u',')[-1].strip()
     except Exception as e:
         current_app.logger.error('Exception Found for Location {0} with exception {1}'.format(location, e))
         return None
