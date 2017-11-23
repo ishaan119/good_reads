@@ -1,5 +1,11 @@
 {%- extends "base.html" %}
 
+{% block styles %}
+    {{ super() }}
+     <link rel="stylesheet"  href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+     <link rel="stylesheet"  href="{{ url_for('static', filename='jssocials.css') }}" />
+     <link rel="stylesheet"  href="{{ url_for('static', filename='jssocials-theme-flat.css') }}" />
+{% endblock %}
 {% block content %}
 <div class="brand">Recommend Me Books</div>
 <div id="loading"></div>
@@ -26,18 +32,28 @@
             </div>
         </div>
  </div>
-    </div>
-      <div class="container-fluid footer navbar-fixed-bottom right">
-        <p>© 2017<a style="color:#0a93a6; text-decoration:none;" href="{{ url_for('feedback') }}"> Feedback</a></p>
-    </div>
+    <div id="share" align="center"></div>
+
 {%  endblock %}
    {% block scripts %}
            {{ super() }}
        <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+       <script src="{{ url_for('static', filename='jssocials.min.js') }}"></script>
+
         <script>
         function loading(){
             $("#loading").show();
             $("#content").hide();
         }
+
+    </script>
+       <script>
+        $("#share").jsSocials({
+            showLabel: false,
+    showCount: false,
+            shareIn: "popup",
+            shares: [ "twitter", "facebook", "googleplus", "linkedin", "pinterest", "stumbleupon"]
+        });
+
     </script>
         {% endblock %}
