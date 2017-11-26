@@ -287,7 +287,6 @@ def get_friend_stats():
 def recommend_book():
     if request.method == "POST":
         app.logger.info("Book recommendations search")
-        print request.form['search']
         books = search_books(request.form['search'])
         return render_template('recommend_book.html', nav=nav.elems, books=books, reco_successful=False)
     else:

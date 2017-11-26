@@ -8,6 +8,7 @@ from utils.helper import get_author_country
 from goodreads.friend import GoodreadFriend
 import requests
 import collections
+import json
 
 
 class OAuthSignIn(object):
@@ -99,6 +100,7 @@ class GoodReadsSignIn(OAuthSignIn):
         request_token = self.service.get_request_token(
             params={'oauth_callback': self.get_callback_url()}
         )
+        self.request_token = request_token
         session['request_token'] = request_token
         print self.service.get_authorize_url(request_token[0])
         dict_callback = {'oauth_callback': self.get_callback_url()}
@@ -117,8 +119,8 @@ class GoodReadsSignIn(OAuthSignIn):
             )
         else:
             oauth_session = self.service.get_auth_session(
-                None,
-                None,
+                self.request_token[0],
+                self.request_token[1],
                 data={'oauth_token': request.args['oauth_token']}
             )
         me = oauth_session.get('api/auth_user')
