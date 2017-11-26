@@ -105,18 +105,22 @@ class GoodReadsSignIn(OAuthSignIn):
         return redirect(self.service.get_authorize_url(request_token[0], oauth_callback=self.get_callback_url()))
 
     def callback(self):
-        if 'request_token' not in session:
-            current_app.logger.error("Error validating oauth")
-            return None
-        request_token = session.pop('request_token')
         if 'oauth_token' not in request.args or request.args['authorize'] == '0':
             current_app.logger.info("Oauth failed")
             return None, None, None
-        oauth_session = self.service.get_auth_session(
-            request_token[0],
-            request_token[1],
-            data={'oauth_token': request.args['oauth_token']}
-        )
+        if 'request_token' in session:
+            request_token = session.pop('request_token')
+            oauth_session = self.service.get_auth_session(
+                request_token[0],
+                request_token[1],
+                data={'oauth_token': request.args['oauth_token']}
+            )
+        else:
+            oauth_session = self.service.get_auth_session(
+                None,
+                None,
+                data={'oauth_token': request.args['oauth_token']}
+            )
         me = oauth_session.get('api/auth_user')
         user_info = xmltodict.parse(me.content)
         user = {'request_token':oauth_session.access_token,'request_secret':oauth_session.access_token_secret,
@@ -270,6 +274,8 @@ def analyze_user_books(user, friend_id=None):
         else:
             gender_analysis['ath_c'][author_info.country] = 1
 
+    if None in gender_analysis['ath_c']:
+        gender_analysis['ath_c']['N/A'] = gender_analysis['ath_c'].pop(None)
     # Get favorite auhtor
     most_books_read_count = 0
     fav_author = ''

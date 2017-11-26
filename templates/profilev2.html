@@ -1,4 +1,21 @@
 {%- extends "base.html" %}
+{% block styles %}
+    {{ super() }}
+     <link rel="stylesheet"  href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+     <link rel="stylesheet"  href="{{ url_for('static', filename='jssocials.css') }}" />
+     <link rel="stylesheet"  href="{{ url_for('static', filename='jssocials-theme-flat.css') }}" />
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+ <meta property="og:title" content="Analyze your books like never before.I have read books from {{ labels|length }} countries">
+<meta property="og:image" content="{{ url_for('static', filename='12.png') }}">
+<meta property="og:description" content="My most read author is {{ fav_author }}. Check out your stats">
+<meta property="og:url" content="https://recommendmebooks.com">
+
+{% endblock %}
+
+
 {% block content %}
 
 <head>
@@ -66,8 +83,17 @@
                 {% endif %}
 			</h3>
 		</div>
-        <div class="col-xs-12" style="height:50px;"></div>
 	</div>
+    <div class="row">
+    <div class="col-md-12">
+        <div id="share" align="center"></div>
+    </div>
+    </div>
+     <div class="row">
+    <div class="col-md-12">
+       <h4 align="center">Share your Stats!</h4>
+    </div>
+    </div>
     <div class="row">
 		<div class="col-md-6">
             <h1><span class="label label-info">Most Read Author :{{ fav_author }}</span></h1>
@@ -102,10 +128,12 @@
 {%  endblock %}
 
 {% block scripts %}
-    <script src={{ url_for('static', filename='Chart.min.js')}}></script>
     {{ super() }}
+    <script src={{ url_for('static', filename='Chart.min.js')}}></script>
      <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+       <script src="{{ url_for('static', filename='jssocials.min.js') }}"></script>
     <script>
+    $("meta[name='og:title1']").attr('content', 'my new title');
     // line-chart
     var lineBarData = {
         labels : [{% for item in timeline %}
@@ -158,4 +186,17 @@
         scaleShowLabels: true
    });
    </script>
+
+    <script>
+     //var canvas = document.getElementById('chart');
+     //var dataURL = canvas.toDataURL();
+     //console.log(dataURL);
+        $("#share").jsSocials({
+            showLabel: false,
+    showCount: false,
+            shareIn: "popup",
+            shares: [ "twitter", "facebook", "googleplus", "linkedin", "pinterest", "stumbleupon"]
+        });
+
+    </script>
 {% endblock %}

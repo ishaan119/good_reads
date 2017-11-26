@@ -6,6 +6,16 @@
      <link rel="stylesheet"  href="{{ url_for('static', filename='jssocials.css') }}" />
      <link rel="stylesheet"  href="{{ url_for('static', filename='jssocials-theme-flat.css') }}" />
 {% endblock %}
+
+{% block head %}
+{{ super() }}
+ <meta property="og:title" content="Analyze your books like never before">
+<meta property="og:image" content="{{ url_for('static', filename='12.png') }}">
+<meta property="og:description" content="Analyze your Goodreads books and get recommendations">
+<meta property="og:url" content="https://recommendmebooks.com">
+
+{% endblock %}
+
 {% block content %}
 <div class="brand">Recommend Me Books</div>
 <div id="loading"></div>
@@ -33,6 +43,7 @@
         </div>
  </div>
     <div id="share" align="center"></div>
+    </div>
 
 {%  endblock %}
    {% block scripts %}
