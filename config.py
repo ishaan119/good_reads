@@ -28,6 +28,7 @@ class DevelopmentConfig(BaseConfig):
     ENV = "dev"
     LOG_LEVEL = 10
     GOOGLE_GEO_CODE_API_KEY = os.getenv("GOOGLE_GEO_CODE_API_KEY")
+    ADMIN_CREDENTIALS = ('admin', 'password')
 
 
 class TestingConfig(BaseConfig):
@@ -54,6 +55,7 @@ class ProductionConfig(BaseConfig):
     ENV = 'prod'
     LOG_LEVEL = 20
     GOOGLE_GEO_CODE_API_KEY = os.getenv("GOOGLE_GEO_CODE_API_KEY")
+    ADMIN_CREDENTIALS = (os.getenv("ADMIN_USERNAME"), os.getenv("ADMIN_PASSWORD"))
 
 
 config = {

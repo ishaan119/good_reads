@@ -1,7 +1,8 @@
-from flask import Flask, redirect, url_for, render_template, flash,session,request
+from flask import Flask, redirect, url_for, render_template, flash,session,request, Response
 from flask_sqlalchemy import SQLAlchemy
 from oauth import OAuthSignIn, search_books, get_book_info, analyze_user_books, get_reco_book
 from flask_bootstrap import Bootstrap
+from werkzeug.exceptions import HTTPException
 from nav import nav, navitems
 from flask_nav.elements import Navbar, View
 import config
@@ -24,7 +25,18 @@ nav.init_app(app)
 db = SQLAlchemy(app)
 
 
-class User( db.Model):
+class ModelView(ModelView):
+    def is_accessible(self):
+        auth = request.authorization or request.environ.get('REMOTE_USER')  # workaround for Apache
+        if not auth or (auth.username, auth.password) != app.config['ADMIN_CREDENTIALS']:
+            raise HTTPException('', Response(
+                "Please log in.", 401,
+                {'WWW-Authenticate': 'Basic realm="Login Required"'}
+            ))
+        return True
+
+
+class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False, unique=True)
