@@ -8,8 +8,7 @@ from utils.helper import get_author_country
 from goodreads.friend import GoodreadFriend
 import requests
 import collections
-import json
-
+from sqlalchemy import text
 
 class OAuthSignIn(object):
     providers = None
@@ -182,9 +181,27 @@ def search_books(q, page=1, search_field='all'):
     return search_results
 
 
-def get_reco_book():
-    book_data = Book.query.first()
-    author_info = Author.query.filter_by(gid=book_data.author_gid)
+def get_reco_book(analysis):
+
+    countries_read = set(analysis['ath_c'].keys())
+    sql = text("select DISTINCT(country) from author")
+    result = db.engine.execute(sql)
+    distinct_country = set()
+    for r in result:
+        print r
+        distinct_country.add(r[0])
+
+    countries_not_read = distinct_country - countries_read
+    for cc in countries_not_read:
+        #Improve this query using joins
+        sql = text("select * from book x JOIN (select gid from author where country='" + cc +"') y ON x.author_gid=y.gid;")
+        result = db.engine.execute(sql)
+        book_data = None
+        for row in result:
+            book_data = row
+        if book_data is not None:
+            break
+    author_info = Author.query.filter_by(gid=book_data.author_gid).first()
     return [book_data, author_info]
 
 

@@ -11,7 +11,7 @@
  <meta property="og:title" content="Analyze your books like never before.I have read books from {{ labels|length }} countries">
 <meta property="og:image" content="{{ url_for('static', filename='12.png') }}">
 <meta property="og:description" content="My most read author is {{ fav_author }}. Check out your stats">
-<meta property="og:url" content="https://recommendmebooks.com">
+<meta property="og:url" content="https://recommendmebooks.com/profile">
 
 {% endblock %}
 
@@ -32,9 +32,9 @@
         <div class="row">
             <div class="col-md-12">
                 {% if friend %}
-                <h3>{{ finfo['name'] }}'s Book Recommendation</h3>
+                <h3>{{ finfo['name'] }}'s Book Recommendation from {{ author_info.country }}!</h3>
                 {% else %}
-                <h3>Your Book Recommendation!</h3>
+                <h3>Your Book Recommendation from {{ author_info.country }}!</h3>
                 {% endif %}
             </div>
             <div class="row">
@@ -58,12 +58,6 @@
 				<dd>
 					{{ reco_book.average_rating }}
 				</dd>
-				<dt>
-                     Author's Place of birth
-				</dt>
-				<dt>
-					 {{ author_info.country }}
-				</dt>
 			</dl>
             </div>
                    <div class="col-md-6">

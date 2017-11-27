@@ -149,7 +149,7 @@ def user_profile():
         labels.append(key)
         values.append(gender_analysis['ath_c'][key])
 
-    book_reco, author_info = get_reco_book()
+    book_reco, author_info = get_reco_book(gender_analysis)
     app.logger.info("For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name.encode('utf-8'), len(review_list), gender_analysis))
     return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),fav_author=fav_author,
                            gender_analysis=gender_analysis, values=values, labels=labels,
@@ -275,7 +275,7 @@ def get_friend_stats():
         labels.append(key)
         values.append(gender_analysis['ath_c'][key])
 
-    book_reco, author_info = get_reco_book()
+    book_reco, author_info = get_reco_book(gender_analysis)
     app.logger.info(
         "For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name.encode('utf-8'), len(review_list), gender_analysis))
     return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),
