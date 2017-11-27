@@ -9,6 +9,8 @@ from goodreads.friend import GoodreadFriend
 import requests
 import collections
 from sqlalchemy import text
+import random
+
 
 class OAuthSignIn(object):
     providers = None
@@ -191,7 +193,9 @@ def get_reco_book(analysis):
         print r
         distinct_country.add(r[0])
 
-    countries_not_read = distinct_country - countries_read
+    countries_not_read = list(distinct_country - countries_read)
+    # Randomly shuffle so that you get new recommendations every time
+    random.shuffle(countries_not_read)
     for cc in countries_not_read:
         #Improve this query using joins
         sql = text("select * from book x JOIN (select gid from author where country='" + cc +"') y ON x.author_gid=y.gid;")
