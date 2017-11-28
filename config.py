@@ -51,7 +51,7 @@ class ProductionConfig(BaseConfig):
             'secret': 'nyxzFDTt63e8f9SjgXlBOIQylq2eNqrRszbS2TiDzA'
         }
     }
-    CALLBACK = "http://recommendmebooks.com/callback/goodreads"
+    CALLBACK = "https://recommendmebooks.com/callback/goodreads"
     ENV = 'prod'
     LOG_LEVEL = 20
     GOOGLE_GEO_CODE_API_KEY = os.getenv("GOOGLE_GEO_CODE_API_KEY")
