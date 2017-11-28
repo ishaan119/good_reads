@@ -198,6 +198,8 @@ def get_reco_book(analysis):
     random.shuffle(countries_not_read)
     for cc in countries_not_read:
         #Improve this query using joins
+        if cc is None or "Ivoire" in cc:
+            continue
         sql = text("select * from book x JOIN (select gid from author where country='" + cc +"') y ON x.author_gid=y.gid;")
         result = db.engine.execute(sql)
         book_data = None
