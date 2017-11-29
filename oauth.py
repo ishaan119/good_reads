@@ -190,7 +190,6 @@ def get_reco_book(analysis):
     result = db.engine.execute(sql)
     distinct_country = set()
     for r in result:
-        print r
         distinct_country.add(r[0])
 
     countries_not_read = list(distinct_country - countries_read)
@@ -275,7 +274,10 @@ def analyze_user_books(user, friend_id=None):
             review_list = [review_list]
         for review in review_list:
             temp = {}
-            book_author[review['book']['authors']['author']['name']] = review['book']['authors']['author']['id']
+            try:
+                book_author[review['book']['authors']['author']['name']] = review['book']['authors']['author']['id']
+            except:
+                continue
             book_data = GoodreadsBook(review['book'])
             if book_data.publication_date is not None:
                 books_published_timeline.append(book_data.publication_date.year)
