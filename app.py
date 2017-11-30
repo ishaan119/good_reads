@@ -245,6 +245,7 @@ def get_friends():
         page_no = request.args.get('page')
     oauth = OAuthSignIn.get_provider('goodreads')
     user_friends, total_friends = oauth.get_user_friends(user.request_token, user.request_secret, user_id, page_no)
+
     f_list = []
     for fr in user_friends:
         tt_dic = {}
@@ -254,7 +255,7 @@ def get_friends():
         f_list.append(tt_dic)
     chunk_f_list = list(chunks(f_list, 4))
     total_pages = int(math.ceil(float(total_friends)/30.0))
-    app.logger.info("For username:{0}, loaded friends page: {1}, with total friends: {2}".format(user.name, page_no, total_friends))
+    app.logger.info("For username:{0}, loaded friends page: {1}, with total friends: {2}".format(user.name.encode('utf-8'), page_no, total_friends))
     return render_template('friend_list.html', nav=nav.elems, friends=chunk_f_list, pages=total_pages)
 
 
