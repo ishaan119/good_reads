@@ -158,7 +158,9 @@ class GoodReadsSignIn(OAuthSignIn):
         me = oauth_session.get('/friend/user.xml', params={'id': user_id, 'page': page})
         friends = xmltodict.parse(me.content)['GoodreadsResponse']
         total_friends = friends['friends']['@total']
-        friend_data = [GoodreadFriend(user) for user in friends['friends']['user']]
+        friend_data = []
+        if total_friends is not '0':
+            friend_data = [GoodreadFriend(user) for user in friends['friends']['user']]
         return friend_data, total_friends
 
 
