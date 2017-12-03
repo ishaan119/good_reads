@@ -3,6 +3,15 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False, unique=True)
+    name = db.Column(db.String(64), nullable=False)
+    request_token = db.Column(db.String(64), nullable=False)
+    request_secret= db.Column(db.String(64), nullable=False)
+    oauth_token = db.Column(db.String(64), nullable=False)
+
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     gid = db.Column(db.Integer, nullable=False, unique=True)

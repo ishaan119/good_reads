@@ -3,14 +3,15 @@ from flask import current_app, url_for, request, redirect, session
 import xmltodict
 from goodreads.author import GoodreadsAuthor
 from goodreads.book import GoodreadsBook
-from data.models import Author, db, Book
+from data.models import Author, db, Book, User
 from utils.helper import get_author_country
 from goodreads.friend import GoodreadFriend
 import requests
 import collections
 from sqlalchemy import text
 import random
-
+import json
+from countrycode import countrycode
 
 class OAuthSignIn(object):
     providers = None
@@ -159,7 +160,7 @@ class GoodReadsSignIn(OAuthSignIn):
         friends = xmltodict.parse(me.content)['GoodreadsResponse']
         total_friends = friends['friends']['@total']
         friend_data = []
-        if total_friends is not '0':
+        if int(total_friends) != 0:
             friend_data = [GoodreadFriend(user) for user in friends['friends']['user']]
         return friend_data, total_friends
 
@@ -313,3 +314,34 @@ def analyze_user_books(user, friend_id=None):
             most_books_read_count = len(books)
             fav_author = author
     return review_list, books_read, gender_analysis, fav_author, sorted(books_published_timeline)
+
+
+def get_global_stats():
+    gg_stats = {'users': [], 'countries': {}}
+    users = User.query.all()
+    t_dict = {}
+    count = 0
+    for user in users:
+        if count == 10:
+            break
+        count += 1
+        _, _, info, _, _ = analyze_user_books(user)
+        print count
+        gg_stats['users'].append(user.id)
+        for cc_key in info['ath_c']:
+            if cc_key in t_dict:
+                t_dict[cc_key] += info['ath_c'][cc_key]
+            else:
+                t_dict[cc_key] = info['ath_c'][cc_key]
+    cc_full_name = t_dict.keys()
+    c_codes = countrycode(codes=cc_full_name, origin='country_name', target='iso3c')
+    cc_list = []
+    for index, elem in enumerate(c_codes):
+        temp = []
+        temp.append(c_codes[index])
+        temp.append(t_dict[cc_full_name[index]])
+        cc_list.append(temp)
+    gg_stats['countries'] = cc_list
+    with open('~/good_reads/file.json', 'w') as f:
+        json.dump(gg_stats, f)
+    return cc_list

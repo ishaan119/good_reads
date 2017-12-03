@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, flash,session,request, Response
 from flask_sqlalchemy import SQLAlchemy
-from oauth import OAuthSignIn, search_books, get_book_info, analyze_user_books, get_reco_book
+from oauth import OAuthSignIn, search_books, get_book_info, analyze_user_books, get_reco_book, get_global_stats
 from flask_bootstrap import Bootstrap
 from werkzeug.exceptions import HTTPException
 from nav import nav, navitems
@@ -15,6 +15,8 @@ import math
 from flask_admin.contrib import sqla
 from flask.ext.admin.contrib.sqla.view import func
 from itertools import groupby
+import json
+
 
 app = Flask(__name__)
 config.configure_app(app)
@@ -116,8 +118,13 @@ def index():
     if 'user_id1' in session:
         return redirect(url_for('user_profile'))
     app.logger.info("Index page loaded")
+    with open('~/good_reads/file.json') as json_data:
+        d = json.load(json_data)
+    print d
     register_element(nav, navitems)
-    return render_template('index.html', nav=nav.elems)
+    country_dist_list = d['countries']
+    print json.dumps(country_dist_list)
+    return render_template('index.html',country_dist=json.dumps(country_dist_list),  nav=nav.elems)
 
 
 def register_element(nav1, navitems1):
@@ -322,6 +329,12 @@ def feedback():
         return render_template('feedback.html', nav=nav.elems, feedback_successful=True)
     else:
         return render_template('feedback.html', nav=nav.elems, feedback_successful=False)
+
+
+@app.route('/global_stats', methods=['GET'])
+def calc_global_stats():
+    get_global_stats()
+    return "", 200
 
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'],host='0.0.0.0')
