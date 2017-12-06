@@ -2,8 +2,8 @@
 {% block styles %}
     {{ super() }}
      <link rel="stylesheet"  href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
-     <link rel="stylesheet"  href="{{ url_for('static', filename='jssocials.css') }}" />
-     <link rel="stylesheet"  href="{{ url_for('static', filename='jssocials-theme-flat.css') }}" />
+     <link rel="stylesheet"  href="{{ url_for('static', filename='css/jssocials.css') }}" />
+     <link rel="stylesheet"  href="{{ url_for('static', filename='css/jssocials-theme-flat.css') }}" />
 {% endblock %}
 
 {% block head %}
@@ -123,9 +123,9 @@
 
 {% block scripts %}
     {{ super() }}
-    <script src={{ url_for('static', filename='Chart.min.js')}}></script>
-     <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
-       <script src="{{ url_for('static', filename='jssocials.min.js') }}"></script>
+    <script src={{ url_for('static', filename='js/Chart.min.js')}}></script>
+     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+       <script src="{{ url_for('static', filename='js/jssocials.min.js') }}"></script>
     <script>
     $("meta[name='og:title1']").attr('content', 'my new title');
     // line-chart

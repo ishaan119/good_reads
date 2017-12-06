@@ -18,7 +18,7 @@ from itertools import groupby
 import json
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 config.configure_app(app)
 if not app.config['ENV'] == 'dev':
     newrelic.agent.initialize('/home/ubuntu/good_reads/newrelic.ini')
@@ -118,13 +118,8 @@ def index():
     if 'user_id1' in session:
         return redirect(url_for('user_profile'))
     app.logger.info("Index page loaded")
-    with open('~/good_reads/file.json') as json_data:
-        d = json.load(json_data)
-    print d
     register_element(nav, navitems)
-    country_dist_list = d['countries']
-    print json.dumps(country_dist_list)
-    return render_template('index.html',country_dist=json.dumps(country_dist_list),  nav=nav.elems)
+    return render_template('index.html',  nav=nav.elems)
 
 
 def register_element(nav1, navitems1):
