@@ -643,6 +643,13 @@ h1, h2, h3, h4, h5, h6, figure {
 						color: $brand-danger;
 					}
 				}
+				.fh3co-lead {
+					font-size: 18px;
+					color: $brand-white;
+					.icon-heart {
+						color: $brand-danger;
+					}
+				}
 			}
 		}
 	}

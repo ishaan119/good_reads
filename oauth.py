@@ -3,6 +3,7 @@ from flask import current_app, url_for, request, redirect, session
 import xmltodict
 from goodreads.author import GoodreadsAuthor
 from goodreads.book import GoodreadsBook
+from goodreads.user import GoodreadsUser
 from data.models import Author, db, Book, User
 from utils.helper import get_author_country
 from goodreads.friend import GoodreadFriend
@@ -345,3 +346,15 @@ def get_global_stats():
     with open('~/good_reads/file.json', 'w') as f:
         json.dump(gg_stats, f)
     return cc_list
+
+
+def get_gr_user_info(user_id, request_token, request_secret):
+    print "Getting user info"
+    oauth = OAuthSignIn.get_provider('goodreads')
+    oauth_session = oauth.service.get_session(
+        (request_token,
+        request_secret)
+    )
+    info = oauth_session.get('/user/show/{0}.xml'.format(user_id))
+    info = GoodreadsUser(xmltodict.parse(info.content)['GoodreadsResponse']['user'])
+    return info

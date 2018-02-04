@@ -1,6 +1,6 @@
-from flask import Flask, redirect, url_for, render_template, flash,session,request, Response
+from flask import Flask, redirect, url_for, render_template, flash,session,request, Response, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from oauth import OAuthSignIn, search_books, get_book_info, analyze_user_books, get_reco_book, get_global_stats
+from oauth import OAuthSignIn, search_books, get_book_info, analyze_user_books, get_reco_book, get_global_stats, get_gr_user_info
 from flask_bootstrap import Bootstrap
 from werkzeug.exceptions import HTTPException
 from nav import nav, navitems
@@ -15,7 +15,6 @@ import math
 from flask_admin.contrib import sqla
 from flask.ext.admin.contrib.sqla.view import func
 from itertools import groupby
-import json
 
 
 app = Flask(__name__, static_url_path='/static')
@@ -126,6 +125,7 @@ def register_element(nav1, navitems1):
     if 'user_id1' in session:
         navitems1 = (navitems1 + [View('Friends', '.get_friends')])
         navitems1 = (navitems1 + [View('Logout', '.logout')])
+        navitems1 = (navitems1 + [View('Recommend A Book', '.recommend_book')])
     return nav1.register_element('top', Navbar(*navitems1))
 
 
@@ -153,7 +153,7 @@ def user_profile():
 
     book_reco, author_info = get_reco_book(gender_analysis)
     app.logger.info("For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name.encode('utf-8'), len(review_list), gender_analysis))
-    return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),fav_author=fav_author,
+    return render_template('starter.html', user_books=books_read, total_book=len(review_list),fav_author=fav_author,
                            gender_analysis=gender_analysis, values=values, labels=labels,
                            reco_book=book_reco, author_info=author_info, friend=False, timeline=time_ss)
     # return jsonify(user_books)
@@ -305,6 +305,16 @@ def about():
     return render_template('about.html', nav=nav.elems)
 
 
+@app.route('/user/info', methods=['GET'])
+def get_user_info():
+    if not user_logged_in():
+        return render_template('index.html', nav=nav.elems)
+    user_id = session['user_id1']
+    user = get_user(user_id)
+    info = get_gr_user_info(user.user_id, user.request_token, user.request_secret)
+    return jsonify({"name": info.name, "image_url": info.small_image_url})
+
+
 @app.route('/recommendations', methods=['GET', 'POST'])
 def add_recommended_book():
     app.logger.info("Book recommendations added")
@@ -324,6 +334,11 @@ def feedback():
         return render_template('feedback.html', nav=nav.elems, feedback_successful=True)
     else:
         return render_template('feedback.html', nav=nav.elems, feedback_successful=False)
+
+
+@app.route('/starter', methods=['GET', 'POST'])
+def starter():
+    return render_template('starter.html')
 
 
 @app.route('/global_stats', methods=['GET'])
