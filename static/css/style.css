@@ -268,6 +268,38 @@ h1, h2, h3, h4, h5, h6, figure {
   text-decoration: none;
 }
 
+
+.loading {
+  /*position: fixed;*/
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  padding-top: 30px;
+  display: none;
+}
+
+.quote-loading {
+  /*position: fixed;*/
+  z-index: 999;
+  height: 2em;
+  width: 40em;
+  overflow: show;
+  margin: auto;
+  padding-top: 90px;
+  display: none;
+  color: #F5F5DC;
+}
+
+.loading-gif {
+    /*display: block;*/
+    width: 80px;
+    height: 80px;
+    padding-top: 20px;
+
+}
+
 @media screen and (max-width: 480px) {
   .col-xxs-12 {
     float: none;

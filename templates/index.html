@@ -67,7 +67,58 @@
 	</head>
 	<body>
 	
-	
+	<script>
+
+		// $('#login_btn').bind('click', function () {
+  //   		$(this).replaceWith('<img class="loading-gif" id="processing" src= "https://govizzle.com/imagesloading-animation.gif"  alt="Processing" />');
+		// });
+
+        function loading(){
+			
+			$('#login_btn').hide();
+       
+            $(".loading").show();
+
+            $(".quote-loading").show();
+            
+
+                    var strings = [
+            'Don\'t cry because it\'s over, smile because it happened.',
+          'I\'m selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can\'t handle me at my worst, then you sure as hell don\'t deserve me at my best.',
+          'Two things are infinite: the universe and human stupidity; and I\'m not sure about the universe.',
+          'A room without books is like a body without a soul.',
+          'Be the change that you wish to see in the world.',
+          'In three words I can sum up everything I\'ve learned about life: it goes on.',
+          'If you want to know what a man\'s like, take a good look at how he treats his inferiors, not his equals.',
+          'I\'ve learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel.',
+          'To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.',
+          'I am so clever that sometimes I don\'t understand a single word of what I am saying.'
+        ];
+
+        var strings_auth = [
+            '- Dr. Seuss',
+          '― Marilyn Monroe',
+          '― Albert Einstein',
+          '― Marcus Tullius Cicero',
+          '― Mahatma Gandhi',
+          '― Robert Frost',
+          '- J.K. Rowling',
+          '― Maya Angelou',
+          '― Ralph Waldo Emerson',
+          '― Oscar Wilde'
+        ];
+
+        var rand = Math.floor(Math.random() * strings.length);
+        var quote = strings[rand];
+        var auth = strings_auth[rand];
+        
+        document.getElementById('loading-text').innerHTML = quote;
+        document.getElementById('loading-auth').innerHTML = auth;
+
+
+        }
+
+    </script>
 	<div id="fh5co-page">
 	<header id="fh5co-header" role="banner">
 		<div class="container">
@@ -99,12 +150,19 @@
 		   						<strong> Analyze your books like never before </strong>
 		   					</h2>
 
-		   					<div class="col-lg-12 text-center" style="color: #27E1CE;">
+		   					<div class="col-lg-12 text-center" style="color: #F5F5DC;">
                     			<p>Log In using Goodreads</p>
                 			</div>
-                			<div class="button text-center">
+                			<div class="login_btn button text-center" id="login_btn">
                       			<a href="{{ url_for('oauth_authorize', provider='goodreads') }}" class="btn btn-default btn-lg" onclick="loading();">Login</a>
                 			</div>
+                			<div id="container" class='loading' >
+                				<img class="loading-gif" id="processing" src= "https://govizzle.com/images/loading-animation.gif"  alt="Processing" />
+							</div>
+                			<div id="container" class='quote-loading' >
+     							<div id='loading-text' class='loading-text'>Processing</div><br/>
+      							<div id='loading-auth' class='loading-auth'></div>
+							</div>
                 			<!-- <div class="clearfix"></div> -->
 		   				</div>
 		   			</div>
