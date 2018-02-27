@@ -41,8 +41,8 @@
 	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 	<link rel="shortcut icon" href="favicon.ico">
 
-	<link href="https://fonts.googleapis.com/css?family=Raleway:200,300,400,700" rel="stylesheet">
-	
+	<link href="https://fonts.googleapis.com/css?family=Raleway:550,300,400,700" rel="stylesheet">
+
 	<!-- Animate.css -->
 	<link rel="stylesheet" href="/static/css/animate.css">
 	<!-- Icomoon Icon Fonts-->
@@ -66,7 +66,7 @@
 
 	</head>
 	<body>
-	
+
 	<script>
 
 		// $('#login_btn').bind('click', function () {
@@ -74,25 +74,25 @@
 		// });
 
         function loading(){
-			
+
 			$('#login_btn').hide();
-       
+
             $(".loading").show();
 
             $(".quote-loading").show();
-            
+
 
                     var strings = [
             'Don\'t cry because it\'s over, smile because it happened.',
-          'I\'m selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can\'t handle me at my worst, then you sure as hell don\'t deserve me at my best.',
-          'Two things are infinite: the universe and human stupidity; and I\'m not sure about the universe.',
-          'A room without books is like a body without a soul.',
-          'Be the change that you wish to see in the world.',
-          'In three words I can sum up everything I\'ve learned about life: it goes on.',
-          'If you want to know what a man\'s like, take a good look at how he treats his inferiors, not his equals.',
-          'I\'ve learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel.',
-          'To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.',
-          'I am so clever that sometimes I don\'t understand a single word of what I am saying.'
+          'I\'m selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can\'t handle me at my worst, then you sure as hell don\'t deserve me at my best......',
+          'Two things are infinite: the universe and human stupidity; and I\'m not sure about the universe.....',
+          'A room without books is like a body without a soul.....',
+          'Be the change that you wish to see in the world.....',
+          'In three words I can sum up everything I\'ve learned about life: it goes on.....',
+          'If you want to know what a man\'s like, take a good look at how he treats his inferiors, not his equals.....',
+          'I\'ve learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel.....',
+          'To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment....',
+          'I am so clever that sometimes I don\'t understand a single word of what I am saying....'
         ];
 
         var strings_auth = [
@@ -111,7 +111,7 @@
         var rand = Math.floor(Math.random() * strings.length);
         var quote = strings[rand];
         var auth = strings_auth[rand];
-        
+
         document.getElementById('loading-text').innerHTML = quote;
         document.getElementById('loading-auth').innerHTML = auth;
 
@@ -134,9 +134,9 @@
 			</div>
 		</div>
 	</header>
-	
+
 	<div class="container">
-		
+
 	</div>
 	<aside id="fh5co-hero" class="js-fullheight">
 		<div class="flexslider js-fullheight">
@@ -171,6 +171,44 @@
 		  	</ul>
 	  	</div>
 	</aside>
+    <div id="fh5co-services-section">
+		<div class="container">
+            	<div class="row">
+				<div class="col-md-6 col-md-offset-3 text-center fh5co-heading animate-box">
+                    <h2><strong>Explore book recommendations of</strong></h2>
+					<p>great thinkers, entrepreneurs, pioneers and visionaries</p>
+				</div>
+			</div>
+
+<div class="carousel slide" id="myCarousel">
+  <div class="carousel-inner">
+    <div class="item active">
+      <div class="col-xs-3"><a href="#"><img src="https://i.imgur.com/nylwzrs.jpg" class="img-responsive img-rounded"></a></div>
+    </div>
+    <div class="item">
+      <div class="col-xs-3"><a href="#"><img src="https://i.imgur.com/s1EI0nB.jpg" class="img-responsive img-rounded"></a></div>
+    </div>
+    <div class="item">
+      <div class="col-xs-3"><a href="#"><img src="https://i.imgur.com/3fB0UIM.jpg" class="img-responsive img-rounded"></a></div>
+    </div>
+    <div class="item">
+      <div class="col-xs-3"><a href="#"><img src="https://i.imgur.com/D0JMfQu.jpg" class="img-responsive img-rounded"></a></div>
+    </div>
+    <div class="item">
+      <div class="col-xs-3"><a href="#"><img src="https://i.imgur.com/PZ6FTYr.jpg" class="img-responsive img-rounded"></a></div>
+    </div>
+    <div class="item">
+      <div class="col-xs-3"><a href="#"><img src="https://i.imgur.com/ZwqmOCY.jpg" class="img-responsive img-rounded"></a></div>
+    </div>
+    <div class="item">
+      <div class="col-xs-3"><a href="#"><img src="https://i.imgur.com/0a8XbgW.jpg" class="img-responsive img-rounded"></a></div>
+    </div>
+    <div class="item">
+      <div class="col-xs-3"><a href="#"><img src="https://i.imgur.com/0a8XbgW.jpg" class="img-responsive img-rounded"></a></div>
+    </div>
+  </div>
+</div>
+</div></div>
 	<div id="fh5co-services-section">
 		<div class="container">
 			<div class="row">
@@ -431,7 +469,28 @@
 
 	<!-- MAIN JS -->
 	<script src="/static/js/main.js"></script>
+    <script>
+        $('#myCarousel').carousel({
+  interval: 4000
+})
 
+$('.carousel .item').each(function(){
+  var next = $(this).next();
+  if (!next.length) {
+    next = $(this).siblings(':first');
+  }
+  next.children(':first-child').clone().appendTo($(this));
+
+  for (var i=0;i<2;i++) {
+    next=next.next();
+    if (!next.length) {
+    	next = $(this).siblings(':first');
+  	}
+
+    next.children(':first-child').clone().appendTo($(this));
+  }
+});
+    </script>
 	</body>
 </html>
 
