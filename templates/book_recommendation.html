@@ -275,7 +275,7 @@ desired effect
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Goodreads Analysis
+        Book Recommendations
 {#        <small>Optional description</small>#}
       </h1>
 {#      <ol class="breadcrumb">#}
@@ -286,170 +286,61 @@ desired effect
 
     <!-- Main content -->
     <section class="content container-fluid">
-        <!-- Book recommendation -->
+        <!-- Book recommendation Influencer -->
         <div class="row">
-            <div class="col-md-12">
-                <div class="box">
-
-                   <div class="box-header with-border">
-              <h3 class="box-title">Your Book Recommendation from  <b>{{ author_info.country or 'NA' }}!</b></h3>
-            </div>
-            <div class="row">
-            <div class="col-md-6">
-                <br>
-                <dl class="dl-horizontal">
-				<dt>
-					Title
-				</dt>
-				<dd>
-					<b> {{ reco_book.title }} </b>
-				</dd>
-				<dt>
-					Description
-				</dt>
-				<dd>
-					{{ reco_book.description[0:250] + '...' | safe}}
-				</dd>
-				<dt>
-					Average Rating
-				</dt>
-				<dd>
-					{{ reco_book.average_rating }}
-				</dd>
-                    <dt>
-					Pages
-				</dt>
-				<dd>
-					{{ reco_book.pages }}
-				</dd>
-                    <dt>
-					Published
-				</dt>
-				<dd>
-					{{ reco_book.publication }}
-				</dd>
-
-			</dl>
-            </div>
-                   <div class="col-md-6">
-                <img src="{{ reco_book.image_url }}" />
-            </div>
-            </div>
-                        <div class="row">
-                              <div id="gr_add_to_books" align="center">
-    <div class="gr_custom_each_container_">
-      <a target="_blank" style="border:none" rel="nofollow" href="https://www.goodreads.com/book/isbn/{{ reco_book.gid }}"><img alt="Harry Potter and the Goblet of Fire (Harry Potter, #4)" src="https://www.goodreads.com/images/atmb_add_book-70x25.png" /></a>
-    </div>
-  </div>
-  <!-- the identifier in the following script tag can be a GR book id or an isbn -->
-  <script src="https://www.goodreads.com/book/add_to_books_widget_frame/{{ reco_book.gid }}?atmb_widget%5Bbutton%5D=atmb_widget_1.png"></script>
-
-                        </div>
-        </div>
-      </div>
-</div>
-        <!-- Labels -->
-      <div class="row">
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <h3> {{ fav_author }} </h3>
-
-              <p>Most Read Author</p>
-            </div>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-green">
-            <div class="inner">
-              <h3>{{ user_books | count  }}</h3>
-
-              <p>Unique Authors</p>
-            </div>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-yellow">
-            <div class="inner">
-              <h3>{{ gender_analysis["male"] }}</h3>
-
-              <p>Male Authors</p>
-            </div>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-red">
-            <div class="inner">
-              <h3>{{ gender_analysis["female"] }}</h3>
-
-              <p>Female Authors</p>
-            </div>
-          </div>
-        </div>
-        <!-- ./col -->
-      </div>
-        <!-- Bar chart for countries -->
-        <div class="row">
-        <div class="col-md-12">
-          <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title">Country Wise Distribution</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="chart">
-                    <!-- Sales Chart Canvas -->
-                    <canvas id="chart" style="height: 450px;"></canvas>
-                  </div>
-                  <!-- /.chart-responsive -->
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-            </div>
-            <!-- ./box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-      </div>
-        <!-- Publication Timeline -->
-        <div class="row">
-        <div class="col-md-12">
-          <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title">Books Read Publication Time line</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="chart">
-                    <!-- Sales Chart Canvas -->
-                    <canvas id="line-chart" style="height: 180px;"></canvas>
-                  </div>
-                  <!-- /.chart-responsive -->
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-            </div>
-            <!-- ./box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img alt="Bootstrap Thumbnail First" src="https://i.imgur.com/nylwzrs.jpg" />
+						<div class="caption">
+							<h3>
+								Thumbnail label
+							</h3>
+							<p>
+								Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+							</p>
+							<p>
+								<a class="btn btn-primary" href="#">Action</a> <a class="btn" href="#">Action</a>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img alt="Bootstrap Thumbnail Second" src="https://i.imgur.com/nylwzrs.jpg" />
+						<div class="caption">
+							<h3>
+								Thumbnail label
+							</h3>
+							<p>
+								Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+							</p>
+							<p>
+								<a class="btn btn-primary" href="#">Action</a> <a class="btn" href="#">Action</a>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img alt="Bootstrap Thumbnail Third" src="http://lorempixel.com/output/sports-q-c-600-200-1.jpg" />
+						<div class="caption">
+							<h3>
+								Thumbnail label
+							</h3>
+							<p>
+								Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+							</p>
+							<p>
+								<a class="btn btn-primary" href="#">Action</a> <a class="btn" href="#">Action</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
     </section>
     <!-- /.content -->
   </div>
@@ -556,94 +447,6 @@ desired effect
 
     <script src="/static/js/Chart.min.js"></script>
        <script src="/static/js/jssocials.min.js"></script>
-    <script>
-    $("meta[name='og:title1']").attr('content', 'my new title');
-    // line-chart
-    var lineBarData = {
-        labels : [{% for item in timeline %}
-                  "{{ item[0] - (item[0] % 10) }}",
-              {% endfor %}],
-    datasets : [
-        {
-         data : [
-             {% for item in timeline %}
-                  "{{ item|length }}",
-              {% endfor %}
-         ]
-        }
-    ]
-    }
-
-    var lineChart = document.getElementById("line-chart").getContext("2d");
-    new Chart(lineChart).Line(lineBarData);
-   // bar chart data
-   var barData = {
-   labels : [{% for item in labels %}
-                  "{{item}}",
-              {% endfor %}],
-   datasets : [
-      {
-            fillColor: "rgba(87 ,194, 30,0.4)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(151,187,205,1)",
-         data : [{% for item in values %}
-                      {{item}},
-                    {% endfor %}]
-      }
-      ]
-   }
-
-   // get bar chart canvas
-   var mychart = document.getElementById("chart").getContext("2d");
-
-   steps = 10
-   max = 100
-   // draw bar chart
-   new Chart(mychart).Bar(barData, {
-        scaleOverride: true,
-        scaleSteps: steps,
-        scaleStepWidth: Math.ceil(max / steps),
-        scaleStartValue: 0,
-        scaleShowVerticalLines: true,
-        scaleShowGridLines : true,
-        barShowStroke : true,
-        scaleShowLabels: true
-   });
-   </script>
-
-    <script>
-     //var canvas = document.getElementById('chart');
-     //var dataURL = canvas.toDataURL();
-     //console.log(dataURL);
-        $("#share").jsSocials({
-            showLabel: false,
-    showCount: false,
-            shareIn: "popup",
-            shares: [ "twitter", "facebook", "googleplus", "linkedin", "pinterest", "stumbleupon"]
-        });
-
-    </script>
-
-    <script>
-        $( document ).ready( function() {
-        $.ajax({
-        type: 'GET',
-    url: '/user/info',
-    success: function(result) {
-            console.log(result)
-        $("#profImage").attr('src', result['image_url']);
-        $("#profImage1").attr('src',  result['image_url']);
-        $("#rightProfImage").attr('src', result['image_url']);
-        $("#rightProfImage1").attr('src',  result['image_url']);
-        $("#userName").text(result['name']);
-        $("#userHiddenName").text(result['name']);
-
-
-    }
-});
-    } );
-
-    </script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

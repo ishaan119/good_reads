@@ -225,7 +225,8 @@ def get_book_info(book_id):
         book_data = Book(gid=r.gid, isbn=r.isbn, isbn13=r.isbn13, title=r.title,
                            description= r.description, publication=r.publication_date,
                            image_url=r.image_url, pages=r.num_pages, ratings_count=r.ratings_count,
-                           average_rating=r.average_rating, language=r.language_code, author_gid=author_data.gid)
+                           average_rating=r.average_rating, language=r.language_code, author_gid=author_data.gid,
+                         influencer_ids='[]', user_recommended_ids='[]')
         try:
             db.session.add(book_data)
             db.session.commit()

@@ -1,0 +1,33 @@
+{%- extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3 class="text-muted">
+				Recommend influencer books
+			</h3>
+        </div>
+    </div>
+    </div>
+    <form action={{ url_for('influencer_reco') }}>
+        book Search:<br>
+          <input type="text" name="book_name" value="Search books">
+    <br>
+    <input list="influencer_name" name="influencer_name">
+            <datalist id="influencer_name">
+            {% for influencer in influencers %}
+                <option value="{{influencer['name'] }} " > {{influencer['name'] }}</option>
+            {%  endfor %}
+          </datalist>
+          <br><br>
+          <input type="submit" value="Submit">
+</form>
+</head>
+<body>
+
+</body>
+</html>
+{%  endblock %}

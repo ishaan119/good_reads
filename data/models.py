@@ -43,3 +43,5 @@ class Book(db.Model):
     language = db.Column(db.String, nullable=True)
     author_gid = db.Column(db.Integer, db.ForeignKey(
         'author.gid'))
+    influencer_ids = db.Column(db.String(2000), nullable=False)
+    user_recommended_ids = db.Column(db.String(5000), nullable=False)

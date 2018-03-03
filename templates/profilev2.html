@@ -9,7 +9,7 @@
 {% block head %}
 {{ super() }}
  <meta property="og:title" content="Analyze your books like never before.I have read books from {{ labels|length }} countries">
-<meta property="og:image" content="{{ url_for('static', filename='12.png') }}">
+<meta property="og:image" content="{{ url_for('static') }}">
 <meta property="og:description" content="My most read author is {{ fav_author }}. Check out your stats">
 <meta property="og:url" content="https://recommendmebooks.com/profile">
 

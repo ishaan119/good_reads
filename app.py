@@ -78,10 +78,17 @@ class Book(db.Model):
     language = db.Column(db.String, nullable=True)
     author_gid = db.Column(db.Integer, db.ForeignKey(
         'author.gid'))
+    influencer_ids = db.Column(db.String(2000), nullable=False)
+    user_recommended_ids = db.Column(db.String(5000), nullable=False)
 
+class Influencer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.String, nullable=True)
+    image_url = db.Column(db.String, nullable=True)
+    books_recommended = db.Column(db.String(5000), nullable=False)
 
 db.create_all()
-
 
 # Customized Post model admin
 class AuthorAdmin(sqla.ModelView):
@@ -104,6 +111,7 @@ admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Author, db.session))
 admin.add_view(AuthorAdmin(db.session))
 admin.add_view(ModelView(Book, db.session))
+admin.add_view(ModelView(Influencer, db.session))
 
 
 def user_logged_in():
@@ -345,6 +353,56 @@ def starter():
 def calc_global_stats():
     get_global_stats()
     return "", 200
+
+
+@app.route('/influencers', methods=['GET','POST'])
+def get_influencers():
+    register_element(nav, navitems)
+    influencer_name = Influencer.query.distinct(Influencer.name)
+    temp = []
+    for name in influencer_name:
+        temp.append(name.name)
+    return render_template('influencers.html',influencers=influencer_name,nav=nav.elems)
+
+
+@app.route('/influencer_recommendations', methods=['GET','POST'])
+def influencer_reco():
+    register_element(nav, navitems)
+    influencer_name = Influencer.query.filter_by(name=str(request.args["influencer_name"]).strip()).first()
+    books = search_books(request.args["book_name"])
+    return render_template('influencer_recommendation.html', influencers=influencer_name,nav=nav.elems, books=books, reco_successful=False)
+
+
+@app.route('/add_influencer_recommendation', methods=['POST'])
+def add_influencer_recommendation():
+    register_element(nav, navitems)
+    book_id, influencer_id = str(request.form['reco']).split('+')
+    book_id = book_id.strip()
+    influencer_id = influencer_id.strip()
+    book_data = get_book_info(book_id)
+    if book_data is None:
+        return render_template('influencers.html', influencers=[], nav=nav.elems)
+    influencer_list = ast.literal_eval(book_data.influencer_ids)
+    if influencer_id not in influencer_list:
+        influencer_list.append(influencer_id)
+    Book.query.filter_by(gid=book_id).update({'influencer_ids':str(influencer_list)})
+    influencer_data = Influencer.query.filter_by(id=influencer_id).first()
+    influencer_books = ast.literal_eval(influencer_data.books_recommended)
+    if book_id not in influencer_books:
+        influencer_books.append(book_id)
+    Influencer.query.filter_by(id=influencer_id).update({'books_recommended': str(influencer_books)})
+    db.session.commit()
+    influencer_name = Influencer.query.distinct(Influencer.name)
+    temp = []
+    for name in influencer_name:
+        temp.append(name.name)
+    return render_template('influencers.html', influencers=influencer_name, nav=nav.elems)
+
+
+@app.route('/book_recommendation_influencer', methods=['GET'])
+def book_recommendation_influencer():
+    register_element(nav, navitems)
+    return render_template('book_recommendation.html', nav=nav.elems)
 
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'],host='0.0.0.0')
