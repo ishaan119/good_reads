@@ -87,6 +87,7 @@ class Influencer(db.Model):
     description = db.Column(db.String, nullable=True)
     image_url = db.Column(db.String, nullable=True)
     books_recommended = db.Column(db.String(5000), nullable=False)
+    category = db.Column(db.String(300), nullable=True)
 
 db.create_all()
 
@@ -402,7 +403,12 @@ def add_influencer_recommendation():
 @app.route('/book_recommendation_influencer', methods=['GET'])
 def book_recommendation_influencer():
     register_element(nav, navitems)
-    return render_template('book_recommendation.html', nav=nav.elems)
+    page = request.args.get('page', 1, type=int)
+    influencers = Influencer.query.order_by(Influencer.id.asc()).paginate(
+        page, 6, False)
+    next_url = url_for('book_recommendation_influencer', page=influencers.next_num) if influencers.has_next else None
+    prev_url = url_for('book_recommendation_influencer', page=influencers.prev_num) if influencers.has_prev else None
+    return render_template('book_recommendation.html', next_url=next_url, prev_url=prev_url,influencers=influencers.items, nav=nav.elems)
 
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'],host='0.0.0.0')
