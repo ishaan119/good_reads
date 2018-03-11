@@ -742,6 +742,8 @@ $('#email-user-form').on('submit', function(e) {
         url: "{{ url_for('get_update_user') }}",
         data: $('form.form-horizontal').serialize(),
         success: function(response) {
+            $('#myModal').modal('hide');
+
         },
         error: function() {
             alert('Error');
