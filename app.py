@@ -291,7 +291,7 @@ def get_friend_stats():
     book_reco, author_info = get_reco_book(gender_analysis)
     app.logger.info(
         "For user_name: {0}, Total books: {1}, Analysis: {2}".format(user.name.encode('utf-8'), len(review_list), gender_analysis))
-    return render_template('profilev2.html', user_books=books_read, total_book=len(review_list),
+    return render_template('starter.html', user_books=books_read, total_book=len(review_list),
                            gender_analysis=gender_analysis, values=values, labels=labels,
                            reco_book=book_reco, author_info=author_info, friend=True, finfo=friend, fav_author=fav_author, timeline=time_ss)
 

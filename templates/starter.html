@@ -336,7 +336,11 @@ desired effect
                 <div class="box">
 
                    <div class="box-header with-border">
-              <h3 class="box-title">Your Book Recommendation from  <b>{{ author_info.country or 'NA' }}!</b></h3>
+                       {% if friend %}
+                <h3>{{ finfo['name'] }}'s Book Recommendation from  <b>{{ author_info.country or 'NA' }}!</b>!</h3>
+                {% else %}
+                <h3>Your Book Recommendation from  <b>{{ author_info.country or 'NA' }}!</b>!</h3>
+                {% endif %}
             </div>
             <div class="row">
             <div class="col-md-6">
