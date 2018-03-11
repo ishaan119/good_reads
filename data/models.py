@@ -11,6 +11,7 @@ class User(db.Model):
     request_token = db.Column(db.String(64), nullable=False)
     request_secret= db.Column(db.String(64), nullable=False)
     oauth_token = db.Column(db.String(64), nullable=False)
+    email = db.Column(db.String(200), nullable=True)
 
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)

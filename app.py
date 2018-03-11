@@ -45,6 +45,7 @@ class User(db.Model):
     request_token = db.Column(db.String(64), nullable=False)
     request_secret= db.Column(db.String(64), nullable=False)
     oauth_token = db.Column(db.String(64), nullable=False)
+    email = db.Column(db.String(200), nullable=True)
 
 
 class Author(db.Model):
@@ -321,7 +322,8 @@ def get_user_info():
     user_id = session['user_id1']
     user = get_user(user_id)
     info = get_gr_user_info(user.user_id, user.request_token, user.request_secret)
-    return jsonify({"name": info.name, "image_url": info.small_image_url})
+
+    return jsonify({"name": info.name, "image_url": info.small_image_url, "email": user.email})
 
 
 @app.route('/recommendations', methods=['GET', 'POST'])
@@ -409,6 +411,15 @@ def book_recommendation_influencer():
     next_url = url_for('book_recommendation_influencer', page=influencers.next_num) if influencers.has_next else None
     prev_url = url_for('book_recommendation_influencer', page=influencers.prev_num) if influencers.has_prev else None
     return render_template('book_recommendation.html', next_url=next_url, prev_url=prev_url,influencers=influencers.items, nav=nav.elems)
+
+
+@app.route('/user', methods=['GET', 'PUT'])
+def get_update_user():
+    print("Adding user email")
+    user_id = session['user_id1']
+    User.query.filter_by(user_id=user_id).update({'email': str(request.form['EMAIL'])})
+    db.session.commit()
+    return jsonify({"msg":"success"})
 
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'],host='0.0.0.0')
