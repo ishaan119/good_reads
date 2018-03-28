@@ -307,7 +307,7 @@ desired effect
                 {%  for influencer in influencers %}
 				<div class="col-md-3">
 					<div class="thumbnail">
-						<img alt="Bootstrap Thumbnail First" src="{{ url_for('static', filename='images/influencers/pope-francis.jpg') }}" />
+						<img alt="Bootstrap Thumbnail First" src="{{ influencer.image_url }}" />
 						<div class="caption">
 							<h3>
 								{{ influencer.name }}
