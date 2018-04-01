@@ -421,5 +421,18 @@ def get_update_user():
     db.session.commit()
     return jsonify({"msg":"success"})
 
+@app.route('/individual_influencer_reco', methods=['GET'])
+def individual_influencer_reco():
+    influencer_id = request.args.get('influencer_id')
+    influencer_data = Influencer.query.filter_by(id=influencer_id).first()
+    books = ast.literal_eval(influencer_data.books_recommended)
+    recommended_list = []
+    for book_id in books:
+        temp = Book.query.filter_by(gid=book_id).first()
+        recommended_list.append(temp)
+    return render_template('influencers_book.html', book_list=recommended_list, nav=nav.elems)
+
+
+
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'],host='0.0.0.0')

@@ -28,13 +28,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-
   <![endif]-->
-      <link rel="stylesheet"  href="/static/css/jssocials.css" />
-     <link rel="stylesheet"  href="/static/css/jssocials-theme-flat.css" />
+
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+    <style>
+        .thumbnail img {
+    height:200px;
+    width:100%;
+}
+    </style>
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -277,7 +282,7 @@ desired effect
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Goodreads Analysis
+        Book Recommendations
 {#        <small>Optional description</small>#}
       </h1>
 {#      <ol class="breadcrumb">#}
@@ -286,234 +291,50 @@ desired effect
 {#      </ol>#}
     </section>
 
-      <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Add your email</h4>
-
-<p>We only use email address to send you recommendations once a month. No marketing email PROMISE :)</p>
-      </div>
-      <div class="modal-body">
-
-<!--End mc_embed_signup-->
-
-   <!-- Begin MailChimp Signup Form -->
-<form class="form-horizontal" id="email-user-form" role="form">
-  <div class="form-group">
-    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-    <div class="col-sm-10">
-    <input type="email" value="" name="EMAIL" class="required email form-control" id="mce-EMAIL"/>
-    </div>
-     </div>
-    <div id="mce-responses" class="clear">
-        <div class="response" id="mce-error-response" style="display:none"></div>
-        <div class="response" id="mce-success-response" style="display:none"></div>
-    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_9e279011b21a23e1aed5e4868_cca4394bc9" value=""/></div>
-    <div class="form-group remove-bottom">
-    <div class="col-sm-offset-2 col-sm-10">
-    <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary"/>
-    </div>
-  </div>
-</form>
-
-<!--End mc_embed_signup-->
-      </div>
-      <div class="modal-footer remove-top">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
     <!-- Main content -->
     <section class="content container-fluid">
-        <!-- Book recommendation -->
-        <div class="row">
-        <div class="col-md-12">
-        <div class="box">
-         <div class="box box-danger">
-                   <div class="box-header with-border">
-                       {% if friend %}
-                <h3>{{ finfo['name'] }}'s Book Recommendation from  <b>{{ author_info.country or 'NA' }}!</b>!</h3>
-                {% else %}
-                <h3>Your Book Recommendation from  <b>{{ author_info.country or 'NA' }}!</b>!</h3>
-                {% endif %}
-            </div>
-            <div class="row">
+       {% for book in book_list %}
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                  <h3 class="box-title">{{ book.title }}</h3>
+                </div>
+             <div class="row">
             <div class="col-md-6">
                 <br>
                 <dl class="dl-horizontal">
 				<dt>
-					Title
-				</dt>
-				<dd>
-					<b> {{ reco_book.title }} </b>
-				</dd>
-                    <br>
-				<dt>
 					Description
 				</dt>
 				<dd>
-					{{ reco_book.description | safe }}
+					{{ book.description | safe}}
 				</dd>
-                    <br>
 				<dt>
 					Average Rating
 				</dt>
 				<dd>
-					{{ reco_book.average_rating }}
+					{{ book.average_rating }}
 				</dd>
                     <dt>
 					Pages
 				</dt>
 				<dd>
-					{{ reco_book.pages }}
+					{{ book.pages }}
 				</dd>
-                    <br>
                     <dt>
 					Published
 				</dt>
 				<dd>
-					{{ reco_book.publication }}
+					{{ book.publication }}
 				</dd>
 
 			</dl>
             </div>
                    <div class="col-md-6">
-                <img src="{{ reco_book.image_url }}" />
+                <img src="{{ book.image_url }}" />
             </div>
             </div>
-                        <div class="row">
-                              <div id="gr_add_to_books" align="center">
-    <div class="gr_custom_each_container_">
-      <a target="_blank" style="border:none" rel="nofollow" href="https://www.goodreads.com/book/isbn/{{ reco_book.gid }}"><img alt="Harry Potter and the Goblet of Fire (Harry Potter, #4)" src="https://www.goodreads.com/images/atmb_add_book-70x25.png" /></a>
-    </div>
-  </div>
-  <!-- the identifier in the following script tag can be a GR book id or an isbn -->
-  <script src="https://www.goodreads.com/book/add_to_books_widget_frame/{{ reco_book.gid }}?atmb_widget%5Bbutton%5D=atmb_widget_1.png"></script>
-
-                        </div>
-        </div>
-      </div>
-        </div>
-        </div>
-
-        <!-- Labels -->
-      <div class="row">
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <h3> {{ fav_author }} </h3>
-
-              <p>Most Read Author</p>
             </div>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-green">
-            <div class="inner">
-              <h3>{{ user_books | count  }}</h3>
-
-              <p>Unique Authors</p>
-            </div>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-yellow">
-            <div class="inner">
-              <h3>{{ gender_analysis["male"] }}</h3>
-
-              <p>Male Authors</p>
-            </div>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-red">
-            <div class="inner">
-              <h3>{{ gender_analysis["female"] }}</h3>
-
-              <p>Female Authors</p>
-            </div>
-          </div>
-        </div>
-        <!-- ./col -->
-      </div>
-        <!-- Bar chart for countries -->
-        <div class="row">
-        <div class="col-md-12">
-          <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title">Country Wise Distribution</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="chart">
-                    <!-- Sales Chart Canvas -->
-                    <canvas id="chart" style="height: 450px;"></canvas>
-                  </div>
-                  <!-- /.chart-responsive -->
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-            </div>
-            <!-- ./box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-      </div>
-
-        <!-- Social Option -->
-            <div class="row">
-    <div class="col-md-12">
-        <div id="share" align="center"></div>
-    </div>
-    </div>
-     <div class="row">
-    <div class="col-md-12">
-       <h4 align="center">Share your Stats!</h4>
-    </div>
-        <!-- Publication Timeline -->
-        <div class="row">
-        <div class="col-md-12">
-          <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title">Books Read Publication Time line</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="chart">
-                    <!-- Sales Chart Canvas -->
-                    <canvas id="line-chart" style="height: 180px;"></canvas>
-                  </div>
-                  <!-- /.chart-responsive -->
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-            </div>
-            <!-- ./box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
+        {% endfor %}
     </section>
     <!-- /.content -->
   </div>
@@ -616,149 +437,11 @@ desired effect
 <script src="/static/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/static/js/adminlte.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js"></script>s
 
 
     <script src="/static/js/Chart.min.js"></script>
        <script src="/static/js/jssocials.min.js"></script>
-    <script>
-    $("meta[name='og:title1']").attr('content', 'my new title');
-    // line-chart
-    var lineBarData = {
-        labels : [{% for item in timeline %}
-                  "{{ item[0] - (item[0] % 10) }}",
-              {% endfor %}],
-    datasets : [
-        {
-         data : [
-             {% for item in timeline %}
-                  "{{ item|length }}",
-              {% endfor %}
-         ]
-        }
-    ]
-    }
 
-    var lineChart = document.getElementById("line-chart").getContext("2d");
-    new Chart(lineChart).Line(lineBarData);
-   // bar chart data
-   var barData = {
-   labels : [{% for item in labels %}
-                  "{{item}}",
-              {% endfor %}],
-   datasets : [
-      {
-            fillColor: "rgba(87 ,194, 30,0.4)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(151,187,205,1)",
-         data : [{% for item in values %}
-                      {{item}},
-                    {% endfor %}]
-      }
-      ]
-   }
-
-   // get bar chart canvas
-   var mychart = document.getElementById("chart").getContext("2d");
-
-   steps = 10
-   max = 100
-   // draw bar chart
-   new Chart(mychart).Bar(barData, {
-        scaleOverride: true,
-        scaleSteps: steps,
-        scaleStepWidth: Math.ceil(max / steps),
-        scaleStartValue: 0,
-        scaleShowVerticalLines: true,
-        scaleShowGridLines : true,
-        barShowStroke : true,
-        scaleShowLabels: true
-   });
-   </script>
-
-    <script>
-     //var canvas = document.getElementById('chart');
-     //var dataURL = canvas.toDataURL();
-     //console.log(dataURL);
-        $("#share").jsSocials({
-            showLabel: false,
-    showCount: false,
-            shareIn: "popup",
-            shares: [ "twitter", "facebook", "googleplus", "linkedin", "pinterest", "stumbleupon"]
-        });
-
-    </script>
-
-    <script>
-        $( document ).ready( function() {
-        $.ajax({
-        type: 'GET',
-    url: '/user/info',
-    success: function(result) {
-            console.log(result)
-        $("#profImage").attr('src', result['image_url']);
-        $("#profImage1").attr('src',  result['image_url']);
-        $("#rightProfImage").attr('src', result['image_url']);
-        $("#rightProfImage1").attr('src',  result['image_url']);
-        $("#userName").text(result['name']);
-        $("#userHiddenName").text(result['name']);
-        if (!!result['email']) {
-            $.cookie('pop', '20000');
-        }
-
-
-    }
-});
-    } );
-
-    </script>
-
-<script>
-     //var canvas = document.getElementById('chart');
-     //var dataURL = canvas.toDataURL();
-     //console.log(dataURL);
-        $("#share").jsSocials({
-            showLabel: false,
-    showCount: false,
-            shareIn: "popup",
-            shares: [ "twitter", "facebook", "googleplus", "linkedin", "pinterest", "stumbleupon"]
-        });
-
-    </script>
-
-<script type="text/javascript">
- $(document).ready(function() {
-     setTimeout(function(){
-      if ($.cookie('pop') == null) {
-         $('#myModal').modal('show');
-         $.cookie('pop', '1');
-     }
-   }, 3000);
- });
-</script>
-
-<script type="text/javascript">
-    $(function() {
-
-$('#email-user-form').on('submit', function(e) {
-    e.preventDefault();
-    $.ajax({
-        type: "PUT",
-        url: "{{ url_for('get_update_user') }}",
-        data: $('form.form-horizontal').serialize(),
-        success: function(response) {
-            $('#myModal').modal('hide');
-
-        },
-        error: function() {
-            alert('Error');
-        }
-    });
-    return false;
-});
-});
-
-</script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
