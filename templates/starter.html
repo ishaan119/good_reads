@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html>
 <head>
   <meta charset="utf-8">
@@ -294,7 +290,7 @@ desired effect
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Add your email</h4>
 
-<p>We only use email address to send you recommendations once a month. No marketing email PROMISE :)</p>
+<p>We only use email address to send you recommendations once a month. No marketing emails PROMISE :)</p>
       </div>
       <div class="modal-body">
 
@@ -448,6 +444,58 @@ desired effect
         </div>
         <!-- ./col -->
       </div>
+    <!-- Influencer list -->
+    <div class="row">
+               <div class="col-md-12">
+                   <div class="box">
+              <div class="box box-danger">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Explore book recommendations of great thinkers, entrepreneurs, pioneers and visionaries.</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                      <div class="col-md-3">
+                        <h3 >{{ influencers[0].name }}</h3><img alt="Bootstrap Image Preview" class="img-responsive img-rounded" style="height: 250px; width:100%;" src="{{ influencers[0].image_url }}" />
+                      </div>
+                     <div class="col-md-3">
+                        <h3 >{{ influencers[1].name }}</h3><img alt="Bootstrap Image Preview" class="img-responsive img-rounded"  style="height: 250px; width:100%;"  src="{{ influencers[1].image_url }}" />
+                      </div>
+                      <div class="col-md-3">
+                        <h3 >{{ influencers[2].name }}</h3><img alt="Bootstrap Image Preview" class="img-responsive img-rounded"  style="height: 250px; width:100%;" src="{{ influencers[2].image_url }}" />
+                      </div>
+                      <div class="col-md-3">
+                        <h3 >{{ influencers[3].name }}</h3><img alt="Bootstrap Image Preview" class="img-responsive img-rounded"  style="height: 250px; width:100%;" src="{{ influencers[3].image_url }}" />
+                      </div>
+
+
+                </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                        <h3 >{{ influencers[4].name }}</h3><img alt="Bootstrap Image Preview" class="img-responsive img-rounded"  style="height: 250px; width:100%;"  src="{{ influencers[4].image_url }}" />
+                      </div>
+                     <div class="col-md-3">
+                        <h3 >{{ influencers[5].name }}</h3><img alt="Bootstrap Image Preview" class="img-responsive img-rounded"  style="height: 250px; width:100%;"  src="{{ influencers[5].image_url }}" />
+                      </div>
+                      <div class="col-md-3">
+                        <h3 >{{ influencers[6].name }}</h3><img alt="Bootstrap Image Preview" class="img-responsive img-rounded"  style="height: 250px; width:100%;"  src="{{ influencers[6].image_url }}" />
+                      </div>
+                      <div class="col-md-3">
+                        <h3 >{{ influencers[7].name }}</h3><img alt="Bootstrap Image Preview" class="img-responsive img-rounded"   style="height: 250px; width:100%;" src="{{ influencers[7].image_url }}" />
+                      </div>
+                </div>
+                </div>
+                  <div class="box-footer text-center">
+                  <a href="{{ url_for('book_recommendation_influencer') }}">View All</a>
+                </div>
+              </div>
+            <!-- ./box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+
         <!-- Bar chart for countries -->
         <div class="row">
         <div class="col-md-12">
@@ -486,6 +534,7 @@ desired effect
     <div class="col-md-12">
        <h4 align="center">Share your Stats!</h4>
     </div>
+     </div>
         <!-- Publication Timeline -->
         <div class="row">
         <div class="col-md-12">
@@ -503,20 +552,69 @@ desired effect
                   </div>
                   <!-- /.chart-responsive -->
                 </div>
+
                 <!-- /.col -->
               </div>
               <!-- /.row -->
             </div>
+          </div>
+        </div>
+        </div>
+
+        <!-- USERS LIST -->
+        <div class="row">
+               <div class="col-md-12">
+                   <div class="box">
+              <div class="box box-danger">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Analyze Your Goodreads Friends Books</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                      <div class="col-md-3">
+                        <h3 id="f_name1"></h3><img alt="Bootstrap Image Preview" id="f_img1" class="img-responsive img-rounded" src="" />
+                      </div>
+                      <div class="col-md-3">
+                        <h3 id="f_name2"></h3><img alt="Bootstrap Image Preview" id="f_img2" class="img-responsive img-rounded"  src="" />
+                      </div>
+                      <div class="col-md-3">
+                        <h3 id="f_name3"></h3><img alt="Bootstrap Image Preview" id="f_img3" class="img-responsive img-rounded" src="" />
+                      </div>
+                      <div class="col-md-3">
+                        <h3 id="f_name4"></h3><img alt="Bootstrap Image Preview" id="f_img4" class="img-responsive img-rounded" src="" />
+                      </div>
+
+
+                </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <h3 id="f_name5"></h3><img alt="Bootstrap Image Preview" id="f_img5" class="img-responsive img-rounded" src="" />
+                      </div>
+                      <div class="col-md-3">
+                        <h3 id="f_name6"></h3><img alt="Bootstrap Image Preview" id="f_img6" class="img-responsive img-rounded img-rounded"  src="" />
+                      </div>
+                      <div class="col-md-3">
+                        <h3 id="f_name7"></h3><img alt="Bootstrap Image Preview" id="f_img7" class="img-responsive img-rounded" src="" />
+                      </div>
+                      <div class="col-md-3">
+                        <h3 id="f_name8"></h3><img alt="Bootstrap Image Preview" id="f_img8" class="img-responsive img-rounded" src="" />
+                      </div>
+                </div>
+                  <div class="box-footer text-center">
+                  <a href="{{ url_for('get_friends') }}">View All Goodreads Friends</a>
+                </div>
+              </div>
             <!-- ./box-body -->
           </div>
           <!-- /.box -->
         </div>
         <!-- /.col -->
       </div>
+                </div>
       <!-- /.row -->
     </section>
     <!-- /.content -->
-  </div>
   <!-- /.content-wrapper -->
 
   <!-- Main Footer -->
@@ -605,7 +703,7 @@ desired effect
   <!-- Add the sidebar's background. This div must be placed
   immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
-</div>
+
 <!-- ./wrapper -->
 
 <!-- REQUIRED JS SCRIPTS -->
@@ -616,7 +714,8 @@ desired effect
 <script src="/static/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/static/js/adminlte.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js"></script>s
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js"></script>
 
 
     <script src="/static/js/Chart.min.js"></script>
@@ -712,7 +811,33 @@ desired effect
     } );
 
     </script>
-
+    <script>
+         $( document ).ready( function() {
+             console.log("Getting freinds")
+        $.ajax({
+        type: 'GET',
+    url: '/get_friends_info',
+    success: function(result) {
+        $("#f_img1").attr('src', result[0]['image_url']);
+        $("#f_name1").text(result[0]['name']);
+        $("#f_img2").attr('src', result[1]['image_url']);
+        $("#f_name2").text(result[1]['name']);
+        $("#f_img3").attr('src', result[2]['image_url']);
+        $("#f_name3").text(result[2]['name']);
+        $("#f_img4").attr('src', result[3]['image_url']);
+        $("#f_name4").text(result[3]['name']);
+        $("#f_img5").attr('src', result[4]['image_url']);
+        $("#f_name5").text(result[4]['name']);
+        $("#f_img6").attr('src', result[5]['image_url']);
+        $("#f_name6").text(result[5]['name']);
+        $("#f_img7").attr('src', result[6]['image_url']);
+        $("#f_name7").text(result[6]['name']);
+        $("#f_img8").attr('src', result[7]['image_url']);
+        $("#f_name8").text(result[7]['name']);
+    }
+});
+    } );
+    </script>
 <script>
      //var canvas = document.getElementById('chart');
      //var dataURL = canvas.toDataURL();
@@ -725,6 +850,17 @@ desired effect
         });
 
     </script>
+
+
+  <script type="text/javascript">
+window._urq = window._urq || [];
+_urq.push(['initSite', 'f40e5ad4-b1d5-4a6c-9e8b-281ae0c3b441']);
+(function() {
+var ur = document.createElement('script'); ur.type = 'text/javascript'; ur.async = true;
+ur.src = ('https:' == document.location.protocol ? 'https://cdn.userreport.com/userreport.js' : 'http://cdn.userreport.com/userreport.js');
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ur, s);
+})();
+</script>
 
 <script type="text/javascript">
  $(document).ready(function() {
@@ -762,5 +898,7 @@ $('#email-user-form').on('submit', function(e) {
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
+  </div>
+</div>
 </body>
 </html>
