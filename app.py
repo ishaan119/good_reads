@@ -458,7 +458,8 @@ def individual_influencer_reco():
     for book_id in books:
         temp = Book.query.filter_by(gid=book_id).first()
         recommended_list.append(temp)
-    return render_template('influencers_book.html', book_list=recommended_list, nav=nav.elems)
+    return render_template('influencers_book.html', book_list=recommended_list,name=influencer_data.name, image_url=influencer_data.image_url,
+                           nav=nav.elems, description=influencer_data.description)
 
 
 

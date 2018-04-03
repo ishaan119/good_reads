@@ -297,10 +297,10 @@ desired effect
         <div class="row">
 
     {% if prev_url %}
-    <a href="{{ prev_url }}">Next</a>
+    <a href="{{ prev_url }}">Previous</a>
     {% endif %}
     {% if next_url %}
-    <a href="{{ next_url }}">Prev</a>
+    <a href="{{ next_url }} ">Next</a>
     {% endif %}
 		<div class="col-md-12">
 			<div class="row">
@@ -316,7 +316,7 @@ desired effect
 								{{ influencer.description }}
 							</p>
 							<p>
-								<a class="btn btn-primary" href="#">Explore</a>
+								<a class="btn btn-primary" href="{{ url_for('individual_influencer_reco', influencer_id=influencer.id) }}">Explore</a>
 							</p>
 						</div>
 					</div>
