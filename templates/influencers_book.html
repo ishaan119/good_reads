@@ -299,7 +299,7 @@ desired effect
     <!-- Main content -->
     <section class="content container-fluid">
        {% for book in book_list %}
-            <div class="box box-danger">
+            <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title"><b>{{ book.title }}</b></h3>
                 </div>
@@ -338,6 +338,19 @@ desired effect
                 <img src="{{ book.image_url }}" />
             </div>
             </div>
+               <div class="row">
+                              <div id="gr_add_to_books" align="center">
+    <div class="gr_custom_each_container_">
+      <a target="_blank" style="border:none" rel="nofollow" href="https://www.goodreads.com/book/isbn/{{book.gid}}"><img alt="Harry Potter and the Goblet of Fire (Harry Potter, #4)" src="https://www.goodreads.com/images/atmb_add_book-70x25.png" /></a>
+    </div>
+  </div>
+  <!-- the identifier in the following script tag can be a GR book id or an isbn -->
+  <script src="https://www.goodreads.com/book/add_to_books_widget_frame/{{book.gid}}?atmb_widget%5Bbutton%5D=atmb_widget_1.png"></script>
+
+                        </div>
+            <br>
+            <br>
+            <br>
             </div>
         {% endfor %}
     </section>
@@ -442,6 +455,8 @@ desired effect
 <script src="/static/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/static/js/adminlte.min.js"></script>
+<script src="/static/js/userreport.js"></script>
+<script src="/static/js/userInfo.js"></script>
 
 
     <script src="/static/js/Chart.min.js"></script>

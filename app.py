@@ -435,7 +435,7 @@ def book_recommendation_influencer():
     register_element(nav, navitems)
     page = request.args.get('page', 1, type=int)
     influencers = Influencer.query.order_by(Influencer.id.asc()).paginate(
-        page, 6, False)
+        page, 8, False)
     next_url = url_for('book_recommendation_influencer', page=influencers.next_num) if influencers.has_next else None
     prev_url = url_for('book_recommendation_influencer', page=influencers.prev_num) if influencers.has_prev else None
     return render_template('book_recommendation.html', next_url=next_url, prev_url=prev_url,influencers=influencers.items, nav=nav.elems)

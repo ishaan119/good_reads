@@ -295,13 +295,14 @@ desired effect
     <section class="content container-fluid">
         <!-- Book recommendation Influencer -->
         <div class="row">
-
+    <ul class="pagination">
     {% if prev_url %}
-    <a href="{{ prev_url }}">Previous</a>
+    <li class="page-item"><a class="page-link" href="{{ prev_url }}">Previous</a></li>
     {% endif %}
     {% if next_url %}
-    <a href="{{ next_url }} ">Next</a>
+    <li class="page-item"><a class="page-link" href="{{ next_url }}">Next     </a></li>
     {% endif %}
+    </ul>
 		<div class="col-md-12">
 			<div class="row">
                 {%  for influencer in influencers %}
@@ -313,7 +314,7 @@ desired effect
 								{{ influencer.name }}
 							</h3>
 							<p>
-								{{ influencer.description }}
+								{{ influencer.description[:65]}}...
 							</p>
 							<p>
 								<a class="btn btn-primary" href="{{ url_for('individual_influencer_reco', influencer_id=influencer.id) }}">Explore</a>
@@ -427,6 +428,8 @@ desired effect
 <script src="/static/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/static/js/adminlte.min.js"></script>
+<script src="/static/js/userreport.js"></script>
+<script src="/static/js/userInfo.js"></script>
 
 
     <script src="/static/js/Chart.min.js"></script>
