@@ -48,6 +48,12 @@ class User(db.Model):
     email = db.Column(db.String(200), nullable=True)
 
 
+class Invite(db.Model):
+    __tablename__ = 'invite'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    invite_email = db.Column(db.String(200), nullable=True)
+
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     gid = db.Column(db.Integer, nullable=False, unique=True)
@@ -114,6 +120,7 @@ admin.add_view(ModelView(Author, db.session))
 admin.add_view(AuthorAdmin(db.session))
 admin.add_view(ModelView(Book, db.session))
 admin.add_view(ModelView(Influencer, db.session))
+admin.add_view(ModelView(Invite, db.session))
 
 
 def user_logged_in():
@@ -461,6 +468,17 @@ def individual_influencer_reco():
     return render_template('influencers_book.html', book_list=recommended_list,name=influencer_data.name, image_url=influencer_data.image_url,
                            nav=nav.elems, description=influencer_data.description)
 
+@app.route('/invite_friends', methods=['POST',])
+def invite_friends():
+    email =  request.form['Email']
+    user_id = session['user_id1']
+    invite_data = Invite(user_id=user_id, invite_email=email)
+    try:
+        db.session.add(invite_data)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+    return jsonify({"msg": "success"})
 
 
 if __name__ == '__main__':

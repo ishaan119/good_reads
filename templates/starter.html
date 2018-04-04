@@ -534,7 +534,27 @@ desired effect
     <div class="col-md-12">
        <h4 align="center">Share your Stats!</h4>
     </div>
-     </div>
+
+         <h4 align="center"><b><strong>Invite Your Friends</strong></b></h4>
+
+                  <!-- search form -->
+{#          <form action="#" method="get" class="form-inline">#}
+{#            <div align="center" class="input-group ">#}
+{#              <input style="width: auto;" type="text" name="q" class="form-control" placeholder="Email">#}
+{#                    <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-user"></i>#}
+{#                    </button>#}
+{#            </div>#}
+{#          </form>#}
+
+         <form align="center"  class="search-form" id="invite_friends">
+             <div class="input-group margin">
+            <input type="text" class="form-control" name="Email" id="friend_email" placeholder="Email">
+                    <span class="input-group-btn">
+                      <button class="btn btn-info btn-flat" type="submit">Invite!</button>
+                    </span>
+             </div>
+         <br><br>
+         </form>
         <!-- Publication Timeline -->
         <div class="row">
         <div class="col-md-12">
@@ -715,6 +735,7 @@ desired effect
 <!-- AdminLTE App -->
 <script src="/static/js/adminlte.min.js"></script>
 <script src="/static/js/userreport.js"></script>
+<script src="/static/js/inviteFriends.js"></script>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js"></script>
 
@@ -883,6 +904,8 @@ $('#email-user-form').on('submit', function(e) {
     return false;
 });
 });
+
+
 
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
