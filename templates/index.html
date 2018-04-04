@@ -434,6 +434,14 @@
 
 	
 	<footer id="fh5co-footer" role="contentinfo">
+
+		<div class="container">
+			<div class="row">
+    <div class="col-md-12">
+        <div id="share" align="center"></div>
+    </div>
+    </div>
+
 			
 			<div class="col-md-12 fh5co-copyright text-center">
 				<p>&copy; 2018 Recommend Me Books. All Rights Reserved.</p>
@@ -484,6 +492,17 @@ $('.carousel .item').each(function(){
     </script>
     <script src="/static/js/jssocials.min.js"></script>
     <script>
+     //var canvas = document.getElementById('chart');
+     //var dataURL = canvas.toDataURL();
+     //console.log(dataURL);
+        $("#share").jsSocials({
+    showCount: true,
+    showLabel: true,
+    shares: ["twitter", "facebook", "googleplus", "linkedin", "pinterest", "stumbleupon", "whatsapp"]
+});
+
+    </script>
+     <script>
   (function (w,i,d,g,e,t,s) {w[d] = w[d]||[];t= i.createElement(g);
     t.async=1;t.src=e;s=i.getElementsByTagName(g)[0];s.parentNode.insertBefore(t, s);
   })(window, document, '_gscq','script','//widgets.getsitecontrol.com/132019/script.js');
