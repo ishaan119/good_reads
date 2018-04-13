@@ -382,11 +382,6 @@ def feedback():
         return render_template('feedback.html', nav=nav.elems, feedback_successful=False)
 
 
-@app.route('/starter', methods=['GET', 'POST'])
-def starter():
-    return render_template('starter.html')
-
-
 @app.route('/global_stats', methods=['GET'])
 def calc_global_stats():
     get_global_stats()
@@ -480,6 +475,10 @@ def invite_friends():
         db.session.rollback()
     return jsonify({"msg": "success"})
 
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('index.html'), 404
 
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'],host='0.0.0.0')

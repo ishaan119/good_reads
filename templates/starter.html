@@ -333,9 +333,9 @@ desired effect
          <div class="box box-danger">
                    <div class="box-header with-border">
                        {% if friend %}
-                <h3>{{ finfo['name'] }}'s Book Recommendation from  <b>{{ author_info.country or 'NA' }}!</b>!</h3>
+                <h3>{{ finfo['name'] }}'s Book Recommendation from  <b>{{ author_info.country if author_info != None else 'NONE' }}!</b>!</h3>
                 {% else %}
-                <h3>Your Book Recommendation from  <b>{{ author_info.country or 'NA' }}!</b>!</h3>
+                <h3>Your Book Recommendation from  <b>{{ author_info.country  if author_info != None else 'NONE' }}!</b>!</h3>
                 {% endif %}
             </div>
             <div class="row">
