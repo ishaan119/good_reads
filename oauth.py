@@ -157,7 +157,7 @@ class GoodReadsSignIn(OAuthSignIn):
             (request_token,
              request_secret)
         )
-        me = oauth_session.get('/friend/user.xml', params={'id': user_id, 'page': page})
+        me = oauth_session.get('/friend/user.xml', params={'id': user_id, 'page': page, 'sort': 'first_name'})
         friends = xmltodict.parse(me.content)['GoodreadsResponse']
         total_friends = friends['friends']['@total']
         friend_data = []
