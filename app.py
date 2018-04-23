@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from flask import Flask, redirect, url_for, render_template, flash,session,request, Response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from oauth import OAuthSignIn, search_books, get_book_info, analyze_user_books, get_reco_book, get_global_stats, get_gr_user_info
@@ -15,8 +17,8 @@ import math
 from flask_admin.contrib import sqla
 from flask.ext.admin.contrib.sqla.view import func
 from itertools import groupby
-
-
+from sqlalchemy import func as func1
+import time
 app = Flask(__name__, static_url_path='/static')
 config.configure_app(app)
 if not app.config['ENV'] == 'dev':
@@ -54,6 +56,8 @@ class Invite(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     invite_email = db.Column(db.String(200), nullable=True)
 
+
+
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     gid = db.Column(db.Integer, nullable=False, unique=True)
@@ -87,6 +91,7 @@ class Book(db.Model):
         'author.gid'))
     influencer_ids = db.Column(db.String(2000), nullable=False)
     user_recommended_ids = db.Column(db.String(5000), nullable=False)
+    preview = db.Column(db.String(10000), nullable=True)
 
 class Influencer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -475,6 +480,13 @@ def invite_friends():
         db.session.rollback()
     return jsonify({"msg": "success"})
 
+
+@app.route('/explore', methods=['GET'])
+def explore_authors():
+    print "Explore called"
+    book_preview = Book.query.filter(Book.preview != None).order_by(func1.random()).first()
+    text = book_preview.preview
+    return render_template('explore.html', book_text=text, book_name=book_preview.title, book_image_url=book_preview.image_url)
 
 @app.errorhandler(404)
 def page_not_found(e):

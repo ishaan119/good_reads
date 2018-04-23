@@ -28,6 +28,7 @@
   <![endif]-->
       <link rel="stylesheet"  href="/static/css/jssocials.css" />
      <link rel="stylesheet"  href="/static/css/jssocials-theme-flat.css" />
+    <script src="/static/js/shareit.js"></script>
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -261,6 +262,7 @@ desired effect
         <li class="active"><a href="{{ url_for('get_friends') }}"><i class="fa fa-link"></i> <span>Friends</span></a></li>
         <li><a href="{{ url_for('recommend_book') }}"><i class="fa fa-link"></i> <span>Recommend Books</span></a></li>
         <li><a href="{{ url_for('about') }}"><i class="fa fa-link"></i> <span>About</span></a></li>
+          <li><a href="{{ url_for('explore_authors') }}"><i class="fa fa-link"></i> <span>Read A Page</span></a></li>
         <li><a href="{{ url_for('logout') }}"><i class="fa fa-link"></i> <span>Logout</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
@@ -550,8 +552,6 @@ desired effect
     </div>
      <div class="row">
     <div class="col-md-12">
-       <h4 align="center">Share your Stats!</h4>
-    </div>
 
          <h4 align="center"><b><strong>Invite Your Friends</strong></b></h4>
 
@@ -573,6 +573,7 @@ desired effect
              </div>
          <br><br>
          </form>
+    </div>
         <!-- Publication Timeline -->
         <div class="row">
         <div class="col-md-12">
